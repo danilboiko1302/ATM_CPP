@@ -14,13 +14,5 @@ public:
     const QString getName() const;
     User(const char*);
 };
-ostream& operator<<(ostream& os, const User& user) {
-
-    os<<"User: "<< user.getName().toUtf8().data() <<endl;
-    for(size_t i=0; i<user.getCards().sizes(); i++) {
-        os<<"Card: "<< user.getCards()[i];
-    }
-    os<<'.';
-    return os;
-}
+ ostream& operator<<(ostream& os, const User& user);
 #endif // USER_H

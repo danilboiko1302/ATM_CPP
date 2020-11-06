@@ -1,7 +1,8 @@
-#include <QtSql>
-#include "user.h"
+
 #ifndef DB_H
 #define DB_H
+#include <QtSql>
+#include "user.h"
 class Db{
 
     int amountUser = -1;
