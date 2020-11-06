@@ -37,7 +37,7 @@ void MainWindow::on_insertCard_clicked()
      if(text.length() != 16){
          QMessageBox::warning(this, tr("Error"),
                                         tr("Wrong input card"));
-     }
+     }else
      {
          bool res = false;
          Sequence <User> *w = &database.getUserAll();
