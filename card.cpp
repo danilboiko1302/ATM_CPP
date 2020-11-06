@@ -62,13 +62,38 @@ void Card::setUserid(int value)
     userid = value;
 }
 
+Card::Card(const QString & number, const QString & pin, const QString & type, const int balance, const QString & status, const int userid)
+{
+    this->number = number;
+    this->pin = pin;
+    this->type = type;
+    this->balance = balance;
+    this->status = status;
+    this->userid = userid;
+}
+
+Card::Card(const char * number, const char * pin, const char * type, const int balance, const char * status, const int userid)
+{
+    this->number = number;
+    this->pin = pin;
+    this->type = type;
+    this->balance = balance;
+    this->status = status;
+    this->userid = userid;
+}
+
 Card::Card()
 {
     
 }
 
-ostream &operator<<(ostream &os, const Card &user)
+ostream &operator<<(ostream &os, const Card & card)
 {
-
+    os<<"Card: number "<<card.getNumber().toUtf8().data();
+    os<<" pin "<<card.getPin().toUtf8().data();
+    os<<" type "<<card.getType().toUtf8().data();
+    os<<" balance "<<card.getBalance();
+    os<<" status "<<card.getStatus().toUtf8().data();
+    os<<" userid "<<card.getUserid();
    return os;
 }

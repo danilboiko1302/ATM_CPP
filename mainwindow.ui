@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextBrowser" name="textBrowser">
+   <widget class="QTextBrowser" name="mainWindow">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -31,7 +31,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="screen4">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -44,7 +44,7 @@ p, li { white-space: pre-wrap; }
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="QPushButton" name="screen3">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -57,7 +57,7 @@ p, li { white-space: pre-wrap; }
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="QPushButton" name="screen2">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -70,7 +70,7 @@ p, li { white-space: pre-wrap; }
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_7">
+   <widget class="QPushButton" name="screen1">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -83,7 +83,7 @@ p, li { white-space: pre-wrap; }
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_8">
+   <widget class="QPushButton" name="screen5">
     <property name="geometry">
      <rect>
       <x>440</x>
@@ -96,7 +96,7 @@ p, li { white-space: pre-wrap; }
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_9">
+   <widget class="QPushButton" name="screen6">
     <property name="geometry">
      <rect>
       <x>440</x>
@@ -109,7 +109,7 @@ p, li { white-space: pre-wrap; }
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_10">
+   <widget class="QPushButton" name="screen7">
     <property name="geometry">
      <rect>
       <x>440</x>
@@ -122,7 +122,7 @@ p, li { white-space: pre-wrap; }
      <string>PushButton</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_11">
+   <widget class="QPushButton" name="screen8">
     <property name="geometry">
      <rect>
       <x>440</x>

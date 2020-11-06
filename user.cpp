@@ -10,10 +10,37 @@ const QString User::getName() const
     return name;
 }
 
+User &User::addCard(const Card& a)
+{
+    cards.add(a);
+    return *this;
+}
 
+
+User:: User():  cards(), name ()
+{
+
+}
 User:: User(const char* a):  cards(), name (a)
 {
 
+}
+
+User:: User(const User & a):  cards(), name (a.getName())
+{
+    for(size_t i = 0; i< a.getCards().sizes(); i++){
+        cards.add(a.cards[i]);
+    }
+}
+
+
+User &User::operator=(const User & user)
+{
+    this->name = user.getName();
+    for(size_t i =0; i<user.cards.sizes(); i++){
+        this->cards.add(user.cards[i]);
+    }
+     return *this;
 }
 
 ostream &operator<<(ostream &os, const User &user) {

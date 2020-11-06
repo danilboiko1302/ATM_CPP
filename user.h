@@ -12,7 +12,11 @@ private:
 public:
    const Sequence <Card>& getCards() const;
     const QString getName() const;
+    User& addCard(const Card& );
     User(const char*);
+    User(const User&);
+    User();
+    User& operator=(const User&);
 };
  ostream& operator<<(ostream& os, const User& user);
 #endif // USER_H
