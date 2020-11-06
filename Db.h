@@ -2,10 +2,12 @@
 #ifndef DB_H
 #define DB_H
 class Db{
-private:
-   QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    int amount = -1;
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 public:
-    char* check();
+    bool addUser(const char*);
+    bool addCard();
+    bool addTransaction();
     Db(const char*,const char*,const char*,const char*);
 };
 

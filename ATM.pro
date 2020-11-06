@@ -20,12 +20,16 @@ SOURCES += \
     card.cpp \
     main.cpp \
     mainwindow.cpp \
+    transaction.cpp \
     user.cpp
 
 HEADERS += \
+    Array.h \
     Db.h \
+    Sequence.h \
     card.h \
     mainwindow.h \
+    transaction.h \
     user.h
 
 FORMS += \

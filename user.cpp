@@ -1,6 +1,6 @@
 #include "user.h"
 
-User::User()
+User:: User(const char* a):  cards(), name (a)
 {
 
 }
