@@ -12,7 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-    ui->mainWindow->setText("Hello");
+    ui->firstWindow->setText("Hello");
+    ui->mainWindow->close();
+
 
 }
 
@@ -44,6 +46,7 @@ void MainWindow::on_insertCard_clicked()
                  if((*w)[i].getCards()[j].getNumber() == text){
                      res = true;
                      database.setCurrentUser((*w)[i]);
+                     database.setCurrentCard((*w)[i].getCards()[j]);
                      break;
                  }
              }
@@ -55,8 +58,8 @@ void MainWindow::on_insertCard_clicked()
          } else {
              QMessageBox::information(this, tr("Greetings"),
                                             tr((*(new QString("Greetings: ")) + database.getCurrentUser().getName()).toUtf8().data()));
-             ui->mainWindow->setText(*(new QString("Hello: ")) + database.getCurrentUser().getName());
-             break;
+//             ui->mainWindow->setText("Hello: " + database.getCurrentUser().getName()+"\n"+"Current card: "+ database.getCurrentCard().getNumber());
+             ui->firstWindow->setText("Enter PIN:\n");            break;
          }
      }
 

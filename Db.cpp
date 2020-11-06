@@ -10,6 +10,16 @@ void Db::setCurrentUser(const User &value)
     currentUser = value;
 }
 
+Card Db::getCurrentCard() const
+{
+    return currentCard;
+}
+
+void Db::setCurrentCard(const Card &value)
+{
+    currentCard = value;
+}
+
 bool Db::addUser(const char * a)
 {
     char str1[11];

@@ -15,7 +15,8 @@ public:
     Card(const QString& ,const QString& ,const QString& ,const int,const QString& ,const int);
     Card(const char*,const char*,const char*,const int,const char*,const int);
     Card();
-
+    Card(const Card&);
+     Card& operator=(const Card&);
     QString& toString();
     QString getNumber() const;
     void setNumber(const QString &value);

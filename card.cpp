@@ -87,6 +87,28 @@ Card::Card()
     
 }
 
+Card::Card(const Card & a)
+{
+    this->number = a.number;
+    this->pin = a.pin;
+    this->type = a.type;
+    this->balance = a.balance;
+    this->status = a.status;
+    this->userid = a.userid;
+
+}
+
+Card &Card::operator=(const Card & a)
+{
+    this->number = a.number;
+    this->pin = a.pin;
+    this->type = a.type;
+    this->balance = a.balance;
+    this->status = a.status;
+    this->userid = a.userid;
+    return *this;
+}
+
 ostream &operator<<(ostream &os, const Card & card)
 {
     os<<"Card: number "<<card.getNumber().toUtf8().data();

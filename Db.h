@@ -9,6 +9,7 @@ private:
     int amountCard = -1;
     int amountTransaction = -1;
     User currentUser;
+    Card currentCard;
     Sequence <User> users;
     Sequence <Transaction> transactions;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
@@ -22,6 +23,8 @@ public:
     Db(const char*,const char*,const char*,const char*);
     User getCurrentUser() const;
     void setCurrentUser(const User &value);
+    Card getCurrentCard() const;
+    void setCurrentCard(const Card &value);
 };
 
 #endif // DB_H
