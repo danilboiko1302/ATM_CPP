@@ -12,8 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     Db test ("databaseatm.csqvtipmkskj.eu-central-1.rds.amazonaws.com","ATM","danil_boiko","danil1302boiko");
    test.getUserAll().show();
-
-
+    QString aa = "123";
+    Card testdf ();
 
 }
 

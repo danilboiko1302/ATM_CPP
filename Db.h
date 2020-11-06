@@ -1,13 +1,20 @@
 #include <QtSql>
+#include "user.h"
 #ifndef DB_H
 #define DB_H
 class Db{
-    int amount = -1;
+
+    int amountUser = -1;
+    int amountCard = -1;
+    int amountTransaction = -1;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 public:
     bool addUser(const char*);
-    bool addCard();
-    bool addTransaction();
+    bool addCard(const char*);
+    bool addTransaction(const char*);
+    Sequence <User>& getUserAll();
+    Sequence <Card>& getCardAll();
+    Sequence <Transaction>& getTransactionAll();
     Db(const char*,const char*,const char*,const char*);
 };
 

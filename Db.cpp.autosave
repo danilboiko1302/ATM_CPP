@@ -13,7 +13,16 @@ bool Db::addUser(const char * a)
 
 Sequence<User> &Db::getUserAll()
 {
+    Sequence<User> res;
+    QSqlQuery a_query;
+   if (!a_query.exec("SELECT * FROM user")) {
+       qDebug() << "Даже селект не получается, я пас.";
+      // return -2;
+   }
 
+   while (a_query.next()) {
+     a_query.value(1).toString();
+   }
 }
 
 Sequence<Card> &Db::getCardAll()
