@@ -120,3 +120,54 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     }
 
 }
+
+void Db::blockCard(const char * a)
+{
+    blockCard(*(new QString(a)));
+}
+
+void Db::blockCard(const QString & a)
+{
+
+    QSqlQuery a_query;
+    QString str_insert = "UPDATE  card  SET status='block' WHERE number='%1';";
+        QString   str = str_insert.arg(a);
+        bool res = a_query.exec(str);
+       if(res){
+           for(size_t i =0; i < users.sizes(); i++){
+               for(size_t j =0; j < users[i].getCards().sizes(); j++){
+                   if(users[i].getCards()[j].getNumber() == a){
+                       users[i].blockCard(a);
+                   }
+               }
+           }
+
+       }
+        qDebug() <<a_query.lastError();
+
+
+}
+
+void Db::unblockCard(const char * a)
+{
+    unblockCard(*(new QString(a)));
+}
+
+void Db::unblockCard(const QString & a)
+{
+    QSqlQuery a_query;
+    QString str_insert = "UPDATE  card  SET status='active' WHERE number='%1';";
+        QString   str = str_insert.arg(a);
+        bool res = a_query.exec(str);
+       if(res){
+           for(size_t i =0; i < users.sizes(); i++){
+               for(size_t j =0; j < users[i].getCards().sizes(); j++){
+                   if(users[i].getCards()[j].getNumber() == a){
+                       users[i].unblockCard(a);
+                   }
+               }
+           }
+
+       }
+        qDebug() <<a_query.lastError();
+}

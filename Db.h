@@ -21,6 +21,10 @@ public:
     Sequence <Card>& getCardAll();
     Sequence <Transaction>& getTransactionAll();
     Db(const char*,const char*,const char*,const char*);
+    void blockCard (const char* );
+    void blockCard (const QString& );
+    void unblockCard (const char* );
+    void unblockCard (const QString& );
     User getCurrentUser() const;
     void setCurrentUser(const User &value);
     Card getCurrentCard() const;

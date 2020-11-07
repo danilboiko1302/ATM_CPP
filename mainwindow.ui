@@ -355,6 +355,74 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QTextBrowser" name="pin">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>50</y>
+      <width>171</width>
+      <height>121</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="empty">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>40</y>
+      <width>341</width>
+      <height>251</height>
+     </rect>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="pins">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>150</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <zorder>mainWindow</zorder>
+   <zorder>screen4</zorder>
+   <zorder>screen3</zorder>
+   <zorder>screen2</zorder>
+   <zorder>screen1</zorder>
+   <zorder>screen5</zorder>
+   <zorder>screen6</zorder>
+   <zorder>screen7</zorder>
+   <zorder>screen8</zorder>
+   <zorder>b1</zorder>
+   <zorder>b2</zorder>
+   <zorder>b3</zorder>
+   <zorder>b4</zorder>
+   <zorder>b5</zorder>
+   <zorder>b6</zorder>
+   <zorder>b7</zorder>
+   <zorder>b8</zorder>
+   <zorder>b9</zorder>
+   <zorder>ok</zorder>
+   <zorder>reset</zorder>
+   <zorder>cancel</zorder>
+   <zorder>textBrowser_3</zorder>
+   <zorder>insertCard</zorder>
+   <zorder>firstWindow</zorder>
+   <zorder>pin</zorder>
+   <zorder>empty</zorder>
+   <zorder>pins</zorder>
+   <zorder>textBrowser_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

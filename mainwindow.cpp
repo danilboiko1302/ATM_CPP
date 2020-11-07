@@ -12,9 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-    ui->firstWindow->setText("Hello");
+    ui->firstWindow->close();
     ui->mainWindow->close();
-
+    ui->pin->close();
 
 }
 
@@ -56,15 +56,126 @@ void MainWindow::on_insertCard_clicked()
              QMessageBox::warning(this, tr("Error"),
                                             tr("Can`t find card with this number"));
          } else {
-             QMessageBox::information(this, tr("Greetings"),
-                                            tr((*(new QString("Greetings: ")) + database.getCurrentUser().getName()).toUtf8().data()));
-//             ui->mainWindow->setText("Hello: " + database.getCurrentUser().getName()+"\n"+"Current card: "+ database.getCurrentCard().getNumber());
-             ui->firstWindow->setText("Enter PIN:\n");            break;
+             if(database.getCurrentCard().getStatus() == "block"){
+                 QMessageBox::warning(this, tr("Error"),
+                                                tr("This card is blocked"));
+             } else {
+                 QMessageBox::information(this, tr("Greetings"),
+                                                tr((*(new QString("Greetings: ")) + database.getCurrentUser().getName()).toUtf8().data()));
+    //             ui->mainWindow->setText("Hello: " + database.getCurrentUser().getName()+"\n"+"Current card: "+ database.getCurrentCard().getNumber());
+                 ui->firstWindow->setText("Enter PIN:\n");
+                 ui->empty->close();
+                 ui->firstWindow->show();
+                 ui->pins->setText("3");
+                 break;
+             }
+
          }
      }
 
  } while (text.length() != 16);
 
 
-    qDebug() << ok;
+
+}
+
+void MainWindow::on_screen1_clicked()
+{
+
+}
+
+
+
+void MainWindow::on_b1_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ ui->pin->setText(ui->pin->toPlainText() + "1");
+}
+
+void MainWindow::on_b2_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ui->pin->setText(ui->pin->toPlainText() + "2");
+}
+
+void MainWindow::on_b3_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ui->pin->setText(ui->pin->toPlainText() + "3");
+}
+void MainWindow::on_b4_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ui->pin->setText(ui->pin->toPlainText() + "4");
+}
+void MainWindow::on_b5_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ui->pin->setText(ui->pin->toPlainText() + "5");
+}
+void MainWindow::on_b6_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ui->pin->setText(ui->pin->toPlainText() + "6");
+}
+void MainWindow::on_b7_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ui->pin->setText(ui->pin->toPlainText() + "7");
+}
+void MainWindow::on_b8_clicked()
+{
+     ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+ui->pin->setText(ui->pin->toPlainText() + "8");
+}
+void MainWindow::on_b9_clicked()
+{
+ ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+    ui->pin->setText(ui->pin->toPlainText() + "9");
+}
+
+void MainWindow::on_ok_clicked()
+{   if(!ui->firstWindow->isHidden()) {
+     if( ui->pin->toPlainText() == database.getCurrentCard().getPin()){
+
+     } else{
+         QMessageBox::warning(this, tr("Error"),
+                                        tr("Wrong PIN"));
+         if(ui->pins->text() == "3"){
+             ui->pins->setText("2");
+         } else  if(ui->pins->text() == "2"){
+             ui->pins->setText("1");
+         } else  {
+             QMessageBox::warning(this, tr("Error"),
+                                            tr("Your Card is Blocked now"));
+             database.blockCard(database.getCurrentCard().getNumber());
+             ui->pin->setText("");
+             ui->firstWindow->close();
+             ui->mainWindow->close();
+             ui->pin->close();
+             ui->empty->show();
+
+         }
+     }
+    ui->pin->setText("");
+    ui->firstWindow->setText("Enter PIN:\n");
+    }
+}
+void MainWindow::on_reset_clicked()
+{
+    if(!ui->firstWindow->isHidden()) {
+ ui->pin->setText("");
+ ui->firstWindow->setText("Enter PIN:\n");
+    }
+}
+
+void MainWindow::on_cancel_clicked()
+{
+   if(!ui->firstWindow->isHidden()) {
+    ui->pin->setText("");
+    ui->firstWindow->close();
+    ui->mainWindow->close();
+    ui->pin->close();
+    ui->empty->show();
+   }
 }
