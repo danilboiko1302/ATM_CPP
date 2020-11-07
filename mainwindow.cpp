@@ -67,6 +67,7 @@ void MainWindow::on_insertCard_clicked()
                  ui->empty->close();
                  ui->firstWindow->show();
                  ui->pins->setText("3");
+                  ui->insertCard->setDisabled(true);
                  break;
              }
 
@@ -137,7 +138,12 @@ void MainWindow::on_b9_clicked()
 void MainWindow::on_ok_clicked()
 {   if(!ui->firstWindow->isHidden()) {
      if( ui->pin->toPlainText() == database.getCurrentCard().getPin()){
+         QMessageBox::information(this, tr("Wlecome"),
+                                        tr("PIN is correct"));
+         ui->firstWindow->close();
+         ui->mainWindow->show();
 
+         ui->empty->close();
      } else{
          QMessageBox::warning(this, tr("Error"),
                                         tr("Wrong PIN"));
@@ -149,10 +155,11 @@ void MainWindow::on_ok_clicked()
              QMessageBox::warning(this, tr("Error"),
                                             tr("Your Card is Blocked now"));
              database.blockCard(database.getCurrentCard().getNumber());
+
              ui->pin->setText("");
              ui->firstWindow->close();
              ui->mainWindow->close();
-             ui->pin->close();
+ ui->insertCard->setDisabled(true);
              ui->empty->show();
 
          }
@@ -175,7 +182,7 @@ void MainWindow::on_cancel_clicked()
     ui->pin->setText("");
     ui->firstWindow->close();
     ui->mainWindow->close();
-    ui->pin->close();
+    ui->insertCard->setDisabled(false);
     ui->empty->show();
    }
 }
