@@ -142,6 +142,8 @@ void MainWindow::on_screen1_clicked()
                                            tr("Not enough money"));
         } else {
             database.getCash(50);
+            QMessageBox::information(this, tr("Cash"),
+                                           tr("You got 50 dollars"));
         }
     }
 
@@ -175,6 +177,8 @@ void MainWindow::on_screen2_clicked()
                                            tr("Not enough money"));
         } else {
             database.getCash(100);
+            QMessageBox::information(this, tr("Cash"),
+                                           tr("You got 100 dollars"));
         }
     }
 }
@@ -204,6 +208,8 @@ void MainWindow::on_screen3_clicked()
                                            tr("Not enough money"));
         } else {
             database.getCash(200);
+            QMessageBox::information(this, tr("Cash"),
+                                           tr("You got 200 dollars"));
         }
     }
 }
@@ -228,6 +234,8 @@ void MainWindow::on_screen4_clicked()
                                            tr("Not enough money"));
         } else {
             database.getCash(500);
+            QMessageBox::information(this, tr("Cash"),
+                                           tr("You got 500 dollars"));
         }
     }
 }
@@ -253,6 +261,8 @@ void MainWindow::on_screen5_clicked()
                                            tr("Not enough money"));
         } else {
             database.getCash(1000);
+            QMessageBox::information(this, tr("Cash"),
+                                           tr("You got 1000 dollars"));
         }
     }
 }
@@ -271,7 +281,40 @@ void MainWindow::on_screen6_clicked()
 
             }
 
+        } else if(!ui->cash->isHidden()){
+        bool ok;
+        int res;
+        do{
+            ok = true;
+             res = QInputDialog::getInt(this, tr("Choose amount multiple of 50"),
+                                                    tr(""), QLineEdit::Normal);
+             if (res < 0 ){
+                 QMessageBox::warning(this, tr("Error"),
+                                                tr("Amount must be more than 0"));
+                  ok = false;
+             } else if(res % 50 != 0){
+                ok = false;
+                QMessageBox::warning(this, tr("Error"),
+                                               tr("Amount must be multiple of 50"));
+            }
+             qDebug() << res;
+        } while(res < 0 || !ok);
+        if(res != 0){
+            if (database.getCurrentCard().getBalance() < res){
+                QMessageBox::warning(this, tr("Error"),
+                                               tr("Not enough money"));
+            } else {
+                database.getCash(res);
+                QString temp ("You got ");
+                temp +=  QString::number(res);
+                temp += " dollars";
+                QMessageBox::information(this, tr("Cash"),
+                                               tr(temp.toUtf8().data()));
+
+            }
         }
+
+    }
 }
 
 void MainWindow::on_screen7_clicked()
