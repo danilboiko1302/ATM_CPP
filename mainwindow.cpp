@@ -17,12 +17,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cash->close();
     ui->trans->close();
     ui->cards->close();
+     ui->addCash->close();
     ui->insertCash->setDisabled(true);
    // debug
-    {
-        ui->mainWindow->show();
-        ui->empty->close();
-    }
+//    {
+//        ui->mainWindow->show();
+//        ui->empty->close();
+//    }
 
     ui->mainWindow->setText("1 Change card\n\n"
                       "2 Check balance\n\n"
@@ -52,46 +53,55 @@ MainWindow::~MainWindow()
 
 void MainWindow::b1()
 {
-    qDebug() << "1";
+    ui->addCash->setText(ui->addCash->toPlainText() + "  1");
     wdg->close();
 
 }
 
 void MainWindow::b2()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  2");
+    wdg->close();
 }
 void MainWindow::b3()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  5");
+    wdg->close();
 }
 void MainWindow::b4()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  10");
+    wdg->close();
 }
 void MainWindow::b5()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  20");
+    wdg->close();
 }
 void MainWindow::b6()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  50");
+    wdg->close();
 }
 void MainWindow::b7()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  100");
+    wdg->close();
 }
 void MainWindow::b8()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  200");
+    wdg->close();
 }
 void MainWindow::b9()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  500");
+    wdg->close();
 }
 void MainWindow::b10()
 {
-
+    ui->addCash->setText(ui->addCash->toPlainText() + "  1000");
+    wdg->close();
 }
 
 
@@ -171,7 +181,7 @@ void MainWindow::on_screen1_clicked()
 
     } else if(!ui->cards->isHidden()){
         if(database.getCurrentUser().getCards().sizes() > 0){
-            if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+            if(database.getCurrentUser().getCards()[0].getStatus() == "block"){
                 QMessageBox::warning(this, tr("Error"),
                                                tr("This card is blocked"));
             } else {
@@ -205,8 +215,10 @@ void MainWindow::on_screen2_clicked()
                                        tr(temp.toUtf8().data()));
 
     } else if(!ui->cards->isHidden()){
+        qDebug()<<"AAAAAAAAAAAA";
             if(database.getCurrentUser().getCards().sizes() > 1){
-                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                  qDebug()<<"BBBBBBBBBBB";
+                if(database.getCurrentUser().getCards()[1].getStatus() == "block"){
                     QMessageBox::warning(this, tr("Error"),
                                                    tr("This card is blocked"));
                 } else {
@@ -237,7 +249,7 @@ void MainWindow::on_screen3_clicked()
 
     } else if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 2){
-                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                if(database.getCurrentUser().getCards()[2].getStatus() == "block"){
                     QMessageBox::warning(this, tr("Error"),
                                                    tr("This card is blocked"));
                 } else {
@@ -264,12 +276,12 @@ void MainWindow::on_screen4_clicked()
 
     if(!ui->mainWindow->isHidden()){
         ui->mainWindow->close();
-
+        ui->addCash->show();
         ui->insertCash->setDisabled(false);
 
     } else if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 3){
-                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                if(database.getCurrentUser().getCards()[3].getStatus() == "block"){
                     QMessageBox::warning(this, tr("Error"),
                                                    tr("This card is blocked"));
                 } else {
@@ -296,7 +308,7 @@ void MainWindow::on_screen5_clicked()
 {
     if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 4){
-                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                if(database.getCurrentUser().getCards()[4].getStatus() == "block"){
                     QMessageBox::warning(this, tr("Error"),
                                                    tr("This card is blocked"));
                 } else {
@@ -322,7 +334,7 @@ void MainWindow::on_screen6_clicked()
 {
     if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 5){
-                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                if(database.getCurrentUser().getCards()[5].getStatus() == "block"){
                     QMessageBox::warning(this, tr("Error"),
                                                    tr("This card is blocked"));
                 } else {
@@ -373,7 +385,7 @@ void MainWindow::on_screen7_clicked()
 {
     if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 6){
-                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                if(database.getCurrentUser().getCards()[6].getStatus() == "block"){
                     QMessageBox::warning(this, tr("Error"),
                                                    tr("This card is blocked"));
                 } else {
