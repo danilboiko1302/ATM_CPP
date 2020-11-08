@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->firstWindow->close();
     ui->mainWindow->close();
     ui->pin->close();
+   database.getUserAll().show();
 
 }
 
@@ -82,6 +83,12 @@ void MainWindow::on_insertCard_clicked()
 
 void MainWindow::on_screen1_clicked()
 {
+
+    if(!ui->cash->isHidden()){
+
+    } else if(!ui->trans->isHidden()){
+
+    }
 
 }
 
