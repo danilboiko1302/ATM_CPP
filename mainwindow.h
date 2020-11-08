@@ -5,6 +5,7 @@
 #include "Db.h"
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QGridLayout>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -14,11 +15,34 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    QWidget *wdg = new QWidget;
     Db database;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 private slots:
+
+    void b1();
+
+    void b2();
+
+    void b3();
+
+    void b4();
+
+    void b5();
+
+    void b6();
+
+    void b7();
+
+    void b8();
+
+    void b9();
+
+    void b10();
+
     void on_insertCard_clicked();
 
     void on_screen1_clicked();
@@ -56,6 +80,8 @@ private slots:
     void on_cancel_clicked();
 
 
+
+    void on_insertCash_clicked();
 
 private:
     Ui::MainWindow *ui;

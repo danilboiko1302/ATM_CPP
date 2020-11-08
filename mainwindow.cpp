@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QTableView>
 #include <iostream>
 using namespace std;
 MainWindow::MainWindow(QWidget *parent)
@@ -18,11 +17,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cash->close();
     ui->trans->close();
     ui->cards->close();
+    ui->insertCash->setDisabled(true);
    // debug
-//    {
-//        ui->mainWindow->show();
-//        ui->empty->close();
-//    }
+    {
+        ui->mainWindow->show();
+        ui->empty->close();
+    }
 
     ui->mainWindow->setText("1 Change card\n\n"
                       "2 Check balance\n\n"
@@ -32,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent)
                       "6 Block card\n\n"
                       "7 Change PIN \n\n"
                       "8 Other");
+
+
     ui->cash->setText("1 50\n\n"
                       "2 100\n\n"
                       "3 200\n\n"
@@ -46,6 +48,50 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::b1()
+{
+    qDebug() << "1";
+    wdg->close();
+
+}
+
+void MainWindow::b2()
+{
+
+}
+void MainWindow::b3()
+{
+
+}
+void MainWindow::b4()
+{
+
+}
+void MainWindow::b5()
+{
+
+}
+void MainWindow::b6()
+{
+
+}
+void MainWindow::b7()
+{
+
+}
+void MainWindow::b8()
+{
+
+}
+void MainWindow::b9()
+{
+
+}
+void MainWindow::b10()
+{
+
 }
 
 
@@ -215,7 +261,13 @@ void MainWindow::on_screen3_clicked()
 }
 void MainWindow::on_screen4_clicked()
 {
-    if(!ui->cards->isHidden()){
+
+    if(!ui->mainWindow->isHidden()){
+        ui->mainWindow->close();
+
+        ui->insertCash->setDisabled(false);
+
+    } else if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 3){
                 if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
                     QMessageBox::warning(this, tr("Error"),
@@ -452,3 +504,54 @@ void MainWindow::on_cancel_clicked()
 }
 
 
+
+void MainWindow::on_insertCash_clicked()
+{
+
+
+    //hide();
+    QGridLayout *layout = new QGridLayout();
+    QPushButton *b1 = new QPushButton();
+    QPushButton *b2 = new QPushButton();
+    QPushButton *b3 = new QPushButton();
+    QPushButton *b4 = new QPushButton();
+    QPushButton *b5 = new QPushButton();
+    QPushButton *b6 = new QPushButton();
+    QPushButton *b7 = new QPushButton();
+    QPushButton *b8 = new QPushButton();
+    QPushButton *b9 = new QPushButton();
+    QPushButton *b10 = new QPushButton();
+    b1->setText("1");
+    b2->setText("2");
+    b3->setText("5");
+    b4->setText("10");
+    b5->setText("20");
+    b6->setText("50");
+    b7->setText("100");
+    b8->setText("200");
+    b9->setText("500");
+    b10->setText("1000");
+    connect(b1, SIGNAL (clicked()), this, SLOT (b1()));
+    connect(b2, SIGNAL (clicked()), this, SLOT (b2()));
+    connect(b3, SIGNAL (clicked()), this, SLOT (b3()));
+    connect(b4, SIGNAL (clicked()), this, SLOT (b4()));
+    connect(b5, SIGNAL (clicked()), this, SLOT (b5()));
+    connect(b6, SIGNAL (clicked()), this, SLOT (b6()));
+    connect(b7, SIGNAL (clicked()), this, SLOT (b7()));
+    connect(b8, SIGNAL (clicked()), this, SLOT (b8()));
+    connect(b9, SIGNAL (clicked()), this, SLOT (b9()));
+    connect(b10, SIGNAL (clicked()), this, SLOT (b10()));
+    layout->addWidget(b1);
+    layout->addWidget(b2);
+    layout->addWidget(b3);
+    layout->addWidget(b4);
+    layout->addWidget(b5);
+    layout->addWidget(b6);
+    layout->addWidget(b7);
+    layout->addWidget(b8);
+    layout->addWidget(b9);
+    layout->addWidget(b10);
+    wdg->setLayout(layout);
+    wdg->show();
+    //a->on_pushButton_clicked();
+}
