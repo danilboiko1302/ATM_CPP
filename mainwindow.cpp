@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->firstWindow->close();
     ui->mainWindow->close();
     ui->pin->close();
-   database.getUserAll().show();
 
 }
 
@@ -91,6 +90,38 @@ void MainWindow::on_screen1_clicked()
     }
 
 }
+void MainWindow::on_screen2_clicked()
+{
+
+}
+
+void MainWindow::on_screen3_clicked()
+{
+
+}
+void MainWindow::on_screen4_clicked()
+{
+
+}
+
+void MainWindow::on_screen5_clicked()
+{
+
+}
+void MainWindow::on_screen6_clicked()
+{
+
+}
+
+void MainWindow::on_screen7_clicked()
+{
+
+}
+void MainWindow::on_screen8_clicked()
+{
+
+}
+
 
 
 
@@ -193,3 +224,5 @@ void MainWindow::on_cancel_clicked()
     ui->empty->show();
    }
 }
+
+
