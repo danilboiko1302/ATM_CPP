@@ -15,6 +15,23 @@ MainWindow::MainWindow(QWidget *parent)
     ui->firstWindow->close();
     ui->mainWindow->close();
     ui->pin->close();
+    ui->cash->close();
+    ui->trans->close();
+    ui->cards->close();
+   // debug
+//    {
+//        ui->mainWindow->show();
+//        ui->empty->close();
+//    }
+
+    ui->mainWindow->setText("1 Change card\n\n"
+                      "2 Check balance\n\n"
+                      "3 Get cash\n\n"
+                      "4 Card replenishment\n\n"
+                      "5 Card transfer\n\n"
+                      "6 Block card\n\n"
+                      "7 Change PIN \n\n"
+                      "8 Other");
 
 }
 
@@ -68,6 +85,7 @@ void MainWindow::on_insertCard_clicked()
                  ui->firstWindow->show();
                  ui->pins->setText("3");
                   ui->insertCard->setDisabled(true);
+
                  break;
              }
 
@@ -83,43 +101,156 @@ void MainWindow::on_insertCard_clicked()
 void MainWindow::on_screen1_clicked()
 {
 
-    if(!ui->cash->isHidden()){
+    if(!ui->mainWindow->isHidden()){
+        ui->cards->setText("");
 
-    } else if(!ui->trans->isHidden()){
+        ui->mainWindow->close();
+        ui->cards->show();
+        for(size_t i = 0; i < database.getCurrentUser().getCards().sizes(); ++i){
+            char str1[11];
+            sprintf(str1, "%d", i+1);
+            ui->cards->setText(ui->cards->toPlainText() + str1 + " " + database.getCurrentUser().getCards()[i].getNumber()+"\n");
+            qDebug() << database.getCurrentUser().getCards().sizes();
+        }
+        ui->cards->setText(ui->cards->toPlainText() + "8 Exit");
+
+
+    } else if(!ui->cards->isHidden()){
+        if(database.getCurrentUser().getCards().sizes() > 0){
+            if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                QMessageBox::warning(this, tr("Error"),
+                                               tr("This card is blocked"));
+            } else {
+                database.setCurrentCard(database.getCurrentUser().getCards()[0]);
+                ui->mainWindow->show();
+                ui->cards->close();
+            }
+
+        }
 
     }
 
 }
 void MainWindow::on_screen2_clicked()
 {
+    if(!ui->mainWindow->isHidden()){
+        char str1[11];
+        sprintf(str1, "%d", database.getCurrentCard().getBalance());
+        QString temp ("Balance for current card is ");
+        temp += str1;
+        QMessageBox::information(this, tr("Balance"),
+                                       tr(temp.toUtf8().data()));
 
+    } else if(!ui->cards->isHidden()){
+            if(database.getCurrentUser().getCards().sizes() > 1){
+                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                    QMessageBox::warning(this, tr("Error"),
+                                                   tr("This card is blocked"));
+                } else {
+                    database.setCurrentCard(database.getCurrentUser().getCards()[1]);
+                    ui->mainWindow->show();
+                    ui->cards->close();
+                }
+
+            }
+
+        }
 }
 
 void MainWindow::on_screen3_clicked()
 {
+    if(!ui->cards->isHidden()){
+            if(database.getCurrentUser().getCards().sizes() > 2){
+                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                    QMessageBox::warning(this, tr("Error"),
+                                                   tr("This card is blocked"));
+                } else {
+                    database.setCurrentCard(database.getCurrentUser().getCards()[2]);
+                    ui->mainWindow->show();
+                    ui->cards->close();
+                }
 
+            }
+
+        }
 }
 void MainWindow::on_screen4_clicked()
 {
+    if(!ui->cards->isHidden()){
+            if(database.getCurrentUser().getCards().sizes() > 3){
+                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                    QMessageBox::warning(this, tr("Error"),
+                                                   tr("This card is blocked"));
+                } else {
+                    database.setCurrentCard(database.getCurrentUser().getCards()[3]);
+                    ui->mainWindow->show();
+                    ui->cards->close();
+                }
 
+            }
+
+        }
 }
 
 void MainWindow::on_screen5_clicked()
 {
+    if(!ui->cards->isHidden()){
+            if(database.getCurrentUser().getCards().sizes() > 4){
+                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                    QMessageBox::warning(this, tr("Error"),
+                                                   tr("This card is blocked"));
+                } else {
+                    database.setCurrentCard(database.getCurrentUser().getCards()[4]);
+                    ui->mainWindow->show();
+                    ui->cards->close();
+                }
 
+            }
+
+        }
 }
 void MainWindow::on_screen6_clicked()
 {
+    if(!ui->cards->isHidden()){
+            if(database.getCurrentUser().getCards().sizes() > 5){
+                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                    QMessageBox::warning(this, tr("Error"),
+                                                   tr("This card is blocked"));
+                } else {
+                    database.setCurrentCard(database.getCurrentUser().getCards()[5]);
+                    ui->mainWindow->show();
+                    ui->cards->close();
+                }
 
+            }
+
+        }
 }
 
 void MainWindow::on_screen7_clicked()
 {
+    if(!ui->cards->isHidden()){
+            if(database.getCurrentUser().getCards().sizes() > 6){
+                if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
+                    QMessageBox::warning(this, tr("Error"),
+                                                   tr("This card is blocked"));
+                } else {
+                    database.setCurrentCard(database.getCurrentUser().getCards()[6]);
+                    ui->mainWindow->show();
+                    ui->cards->close();
+                }
 
+            }
+
+        }
 }
 void MainWindow::on_screen8_clicked()
 {
+    if(!ui->cards->isHidden()){
+        ui->mainWindow->show();
+        ui->cards->close();
 
+        }
 }
 
 
@@ -178,6 +309,7 @@ void MainWindow::on_ok_clicked()
      if( ui->pin->toPlainText() == database.getCurrentCard().getPin()){
          QMessageBox::information(this, tr("Wlecome"),
                                         tr("PIN is correct"));
+
          ui->firstWindow->close();
          ui->mainWindow->show();
 
