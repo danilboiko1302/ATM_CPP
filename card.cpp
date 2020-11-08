@@ -62,6 +62,11 @@ void Card::setUserid(int value)
     userid = value;
 }
 
+void Card::getCash(const int)
+{
+
+}
+
 Card::Card(const QString & number, const QString & pin, const QString & type, const int balance, const QString & status, const int userid)
 {
     this->number = number;

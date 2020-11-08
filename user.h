@@ -21,6 +21,7 @@ public:
     void blockCard (const QString& );
     void unblockCard (const char* );
     void unblockCard (const QString& );
+    void getCash(const QString& a, const int b);
 };
  ostream& operator<<(ostream& os, const User& user);
 #endif // USER_H

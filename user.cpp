@@ -67,6 +67,15 @@ void User::unblockCard(const QString& a)
         }
     }
 }
+
+void User::getCash(const QString& a, const int b)
+{
+    for(size_t j =0; j < cards.sizes(); j++){
+        if( cards[j].getNumber() == a){
+            cards[j].setBalance(cards[j].getBalance() - b);
+        }
+    }
+}
 ostream &operator<<(ostream &os, const User &user) {
 
     os<<"User: "<< user.getName().toUtf8().data() <<endl;

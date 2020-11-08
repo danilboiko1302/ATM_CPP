@@ -5,9 +5,7 @@
 #include "user.h"
 class Db{
 private:
-    int amountUser = -1;
-    int amountCard = -1;
-    int amountTransaction = -1;
+
     User currentUser;
     Card currentCard;
     Sequence <User> users;
@@ -25,10 +23,12 @@ public:
     void blockCard (const QString& );
     void unblockCard (const char* );
     void unblockCard (const QString& );
+    void getCash(const int);
     User getCurrentUser() const;
     void setCurrentUser(const User &value);
     Card getCurrentCard() const;
     void setCurrentCard(const Card &value);
+
 };
 
 #endif // DB_H

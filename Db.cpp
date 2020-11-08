@@ -169,5 +169,30 @@ void Db::unblockCard(const QString & a)
            }
 
        }
-        qDebug() <<a_query.lastError();
+       qDebug() <<a_query.lastError();
+}
+
+void Db::getCash(const int a)
+{
+    char balance[11];
+    sprintf(balance, "%d", currentCard.getBalance() - a);
+    qDebug() <<balance;
+    QSqlQuery a_query;
+    QString str_insert = "UPDATE  card  SET balance=%1 WHERE number='%2';";
+        QString   str = str_insert.arg(balance).arg(currentCard.getNumber());
+        bool res = a_query.exec(str);
+       if(res){
+             currentCard.setBalance(currentCard.getBalance() - a);
+             for(size_t i =0; i < users.sizes(); i++){
+                 for(size_t j =0; j < users[i].getCards().sizes(); j++){
+                     if(users[i].getCards()[j].getNumber() == currentCard.getNumber()){
+                         users[i].getCash(currentCard.getNumber(),a);
+                     }
+                 }
+             }
+
+       }
+       qDebug() <<a_query.lastError();
+
+       getCardAll().show();
 }

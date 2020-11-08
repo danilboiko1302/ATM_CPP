@@ -30,6 +30,7 @@ public:
     void setStatus(const QString &value);
     int getUserid() const;
     void setUserid(int value);
+     void getCash(const int);
 };
  ostream& operator<<(ostream& os, const Card& user);
 #endif // CARD_H

@@ -32,6 +32,14 @@ MainWindow::MainWindow(QWidget *parent)
                       "6 Block card\n\n"
                       "7 Change PIN \n\n"
                       "8 Other");
+    ui->cash->setText("1 50\n\n"
+                      "2 100\n\n"
+                      "3 200\n\n"
+                      "4 500\n\n"
+                      "5 1000\n\n"
+                      "6 another amount\n\n"
+                      "8 Exit"
+                      );
 
 }
 
@@ -128,6 +136,13 @@ void MainWindow::on_screen1_clicked()
 
         }
 
+    } else if(!ui->cash->isHidden()){
+        if (database.getCurrentCard().getBalance() < 50){
+            QMessageBox::warning(this, tr("Error"),
+                                           tr("Not enough money"));
+        } else {
+            database.getCash(50);
+        }
     }
 
 }
@@ -154,12 +169,23 @@ void MainWindow::on_screen2_clicked()
 
             }
 
+        } else if(!ui->cash->isHidden()){
+        if (database.getCurrentCard().getBalance() < 100){
+            QMessageBox::warning(this, tr("Error"),
+                                           tr("Not enough money"));
+        } else {
+            database.getCash(100);
         }
+    }
 }
 
 void MainWindow::on_screen3_clicked()
 {
-    if(!ui->cards->isHidden()){
+    if(!ui->mainWindow->isHidden()){
+        ui->mainWindow->close();
+        ui->cash->show();
+
+    } else if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 2){
                 if(database.getCurrentUser().getCards()[0].getStatus() == "blocked"){
                     QMessageBox::warning(this, tr("Error"),
@@ -172,7 +198,14 @@ void MainWindow::on_screen3_clicked()
 
             }
 
+        } else if(!ui->cash->isHidden()){
+        if (database.getCurrentCard().getBalance() < 200){
+            QMessageBox::warning(this, tr("Error"),
+                                           tr("Not enough money"));
+        } else {
+            database.getCash(200);
         }
+    }
 }
 void MainWindow::on_screen4_clicked()
 {
@@ -189,7 +222,14 @@ void MainWindow::on_screen4_clicked()
 
             }
 
+        } else if(!ui->cash->isHidden()){
+        if (database.getCurrentCard().getBalance() < 500){
+            QMessageBox::warning(this, tr("Error"),
+                                           tr("Not enough money"));
+        } else {
+            database.getCash(500);
         }
+    }
 }
 
 void MainWindow::on_screen5_clicked()
@@ -207,7 +247,14 @@ void MainWindow::on_screen5_clicked()
 
             }
 
+        } else if(!ui->cash->isHidden()){
+        if (database.getCurrentCard().getBalance() < 1000){
+            QMessageBox::warning(this, tr("Error"),
+                                           tr("Not enough money"));
+        } else {
+            database.getCash(1000);
         }
+    }
 }
 void MainWindow::on_screen6_clicked()
 {
@@ -250,7 +297,11 @@ void MainWindow::on_screen8_clicked()
         ui->mainWindow->show();
         ui->cards->close();
 
-        }
+    } else if(!ui->cash->isHidden()){
+        ui->mainWindow->show();
+        ui->cash->close();
+
+    }
 }
 
 
