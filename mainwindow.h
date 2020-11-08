@@ -23,6 +23,20 @@ private slots:
 
     void on_screen1_clicked();
 
+    void on_screen2_clicked();
+
+    void on_screen3_clicked();
+
+    void on_screen4_clicked();
+
+    void on_screen5_clicked();
+
+    void on_screen6_clicked();
+
+    void on_screen7_clicked();
+
+    void on_screen8_clicked();
+
     void on_reset_clicked();
 
     void on_b1_clicked();
@@ -40,6 +54,8 @@ private slots:
     void on_ok_clicked();
 
     void on_cancel_clicked();
+
+
 
 private:
     Ui::MainWindow *ui;
