@@ -38,11 +38,11 @@ private:
 };
 template< typename Elem>
 Sequence<Elem>::Sequence(const size_t capacity):_size(0),_allocator((new Array<Elem>(capacity))){
-    cout<<"Sequence created"<<endl;
+    //cout<<"Sequence created"<<endl;
 }
 template< typename Elem>
 Sequence<Elem>::~Sequence(){
-    cout<<"Sequence deleted"<<endl;
+   // cout<<"Sequence deleted"<<endl;
 }
 
 template<typename Elem>

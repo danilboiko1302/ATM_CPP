@@ -27,14 +27,14 @@ public:
 
 template< typename Elem>
 Array<Elem>::Array(size_t cap ): _len(cap), _allocator(new Elem[_len]){
-    cout<<"Created Array"<<endl;
+   // cout<<"Created Array"<<endl;
 }
 template< typename Elem>
 Array<Elem>::Array(const Array & a): _len(a.size()), _allocator(new Elem[_len]) {
     for(size_t i = 0; i<_len;++i){
         _allocator[i] = a._allocator[i];
     }
-    cout<<"Copied Array"<<endl;
+   // cout<<"Copied Array"<<endl;
 }
 template< typename Elem>
 Array< Elem>& Array< Elem>::operator=(const Array & a) {
@@ -48,7 +48,7 @@ Array< Elem>& Array< Elem>::operator=(const Array & a) {
     for(size_t i = 0; i<_len;++i){
         _allocator[i] = temp[i];
     }
-    cout<<"Copied Array"<<endl;
+  //  cout<<"Copied Array"<<endl;
     return *this;
 }
 template< typename Elem>
