@@ -383,6 +383,7 @@ void MainWindow::on_screen7_clicked()
                         database.changePin(database.currentCard.getNumber(), QString::number(res));
                            QMessageBox::information(this, tr("Pin"),
                                                           tr("Pin in changed"));
+                           setDefault();
                           break;
                       case QMessageBox::Cancel:
                           break;
