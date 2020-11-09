@@ -1,8 +1,6 @@
 #ifndef USER_H
 #define USER_H
-#include <QApplication>
-#include "Sequence.h"
-#include "card.h"
+
 #include "transaction.h"
 class User
 {

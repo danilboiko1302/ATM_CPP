@@ -81,6 +81,8 @@ MainWindow::MainWindow(QWidget *parent)
         layout->addWidget(b9);
         layout->addWidget(b10);
         wdg->setLayout(layout);
+
+       // database.sendMoney("4144785936257485","4144785936257478",100);
     }
 
 }
@@ -152,7 +154,7 @@ void MainWindow::on_insertCard_clicked()
                                              "", &ok);
      if(!ok) return;
       qDebug() << text.length();
-     if(text.length() != 16){
+     if(text.length() != 16 || text.toULongLong() == 0){
          QMessageBox::warning(this, tr("Error"),
                                         tr("Wrong input card"));
      }else
@@ -170,9 +172,7 @@ void MainWindow::on_insertCard_clicked()
              }
              if(res) break;
          }
-         qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-         qDebug() << database.currentUser.getCards().sizes();
-         qDebug() << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+
          if(!res){
              QMessageBox::warning(this, tr("Error"),
                                             tr("Can`t find card with this number"));
@@ -196,7 +196,7 @@ void MainWindow::on_insertCard_clicked()
          }
      }
 
- } while (text.length() != 16);
+ } while (text.length() != 16 || text.toULongLong() == 0);
 
 
 
@@ -230,6 +230,7 @@ void MainWindow::on_screen1_clicked()
         ui->addCash->close();
         ui->mainWindow->show();
         ui->sum->setText("0");
+        ui->insertCash->setDisabled(true);
     }
 
 }
@@ -643,7 +644,7 @@ void MainWindow::giveCash(const int a)
         QMessageBox::warning(this, tr("Error"),
                                        tr("Not enough money"));
     } else {
-        database.getCash(a);
+        database.getCash(database.currentCard.getNumber(),a);
         if(a > 0){
             QString temp ("You got ");
             temp+=QString::number(a);
