@@ -56,6 +56,15 @@ void User::blockCard(const QString& a)
         }
     }
 }
+
+void User::changePin(const QString & name, const QString & pin)
+{
+    for(size_t j =0; j < cards.sizes(); j++){
+        if( cards[j].getNumber() == name){
+            cards[j].setPin(pin);
+        }
+    }
+}
 void User::unblockCard(const char * a)
 {
     unblockCard(*(new QString(a)));

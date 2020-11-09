@@ -11,17 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-    ui->firstWindow->close();
-    ui->mainWindow->close();
-    ui->pin->close();
-    ui->cash->close();
-    ui->trans->close();
-    ui->cards->close();
-     ui->addCash->close();
-    ui->insertCash->setDisabled(true);
-    ui->pin->close();
-    ui->pins->close();
-    ui->sum->close();
+    setDefault();
    // debug
 //    {
 //        ui->mainWindow->show();
@@ -318,6 +308,8 @@ void MainWindow::on_screen6_clicked()
                database.blockCard(database.currentCard.getNumber());
                QMessageBox::warning(this, tr("Error"),
                                               tr("Your Card is Blocked now"));
+               setDefault();
+
               break;
           case QMessageBox::Cancel:
               break;
@@ -356,7 +348,55 @@ void MainWindow::on_screen6_clicked()
 
 void MainWindow::on_screen7_clicked()
 {
-    if(!ui->cards->isHidden()){
+    if(!ui->mainWindow->isHidden()){
+        bool ok;
+         int res;
+        QString text;
+        do{
+             text = QInputDialog::getText(this, tr("Insert new Pin"),
+                                                    tr("Pin: "), QLineEdit::Normal,
+                                                    "", &ok);
+            if(!ok) return;
+             qDebug() << text.length();
+            if(text.length() < 4){
+                QMessageBox::warning(this, tr("Error"),
+                                               tr("Pin is too short"));
+            }else
+            {
+                 res = text.toInt();
+                if (res <= 0){
+                    QMessageBox::warning(this, tr("Error"),
+                                                   tr("Wrong input"));
+                } else {
+                    QMessageBox msgBox;
+                    QString temp ("You want to change pin on your current card ");
+                    temp += database.currentCard.getNumber();
+                    msgBox.setText(temp);
+                    msgBox.setInformativeText("Are you sure?");
+                    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                    msgBox.setDefaultButton(QMessageBox::Cancel);
+                    int ret = msgBox.exec();
+                    switch (ret) {
+                      case QMessageBox::Ok:
+                          // Ok was clicked
+
+                        database.changePin(database.currentCard.getNumber(), QString::number(res));
+                           QMessageBox::information(this, tr("Pin"),
+                                                          tr("Pin in changed"));
+                          break;
+                      case QMessageBox::Cancel:
+                          break;
+                      default:
+                          // should never be reached
+                          break;
+                    }
+                }
+            }
+
+
+        } while (text.length() < 4 || res <= 0);
+
+    } else if(!ui->cards->isHidden()){
             checkBlockCard(6);
         }
 }
@@ -482,6 +522,23 @@ void MainWindow::on_cancel_clicked()
 void MainWindow::on_insertCash_clicked()
 {
     wdg->show();
+}
+
+void MainWindow::setDefault()
+{
+    ui->firstWindow->close();
+    ui->mainWindow->close();
+    ui->pin->close();
+    ui->cash->close();
+    ui->trans->close();
+    ui->cards->close();
+    ui->addCash->close();
+    ui->insertCash->setDisabled(true);
+    ui->pin->close();
+    ui->pins->close();
+    ui->sum->close();
+    ui->empty->show();
+    ui->insertCard->setDisabled(false);
 }
 
 void MainWindow::checkBlockCard(const size_t a)

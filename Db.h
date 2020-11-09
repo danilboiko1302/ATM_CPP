@@ -24,6 +24,7 @@ public:
     Db(const char*,const char*,const char*,const char*);
     void blockCard (const char* );
     void blockCard (const QString& );
+    void changePin (const QString&,const QString& );
     void unblockCard (const char* );
     void unblockCard (const QString& );
     void getCash(const int);

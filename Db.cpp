@@ -160,7 +160,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     db.setUserName(user);
     db.setPassword(password);
     db.open();
-    //backUp();
+    backUp();
      QSqlQuery a_query;
     if (!a_query.exec("SELECT * FROM user")) {
         qDebug() << "Даже селект не получается, я пас.";
@@ -217,6 +217,25 @@ void Db::blockCard(const QString & a)
         qDebug() <<a_query.lastError();
 
 
+}
+
+void Db::changePin(const QString & name, const QString & pin)
+{
+    QSqlQuery a_query;
+    QString str_insert = "UPDATE  card  SET pin='%1' WHERE number='%2';";
+        QString   str = str_insert.arg(pin).arg(name);
+        bool res = a_query.exec(str);
+       if(res){
+           for(size_t i =0; i < users.sizes(); i++){
+               for(size_t j =0; j < users[i].getCards().sizes(); j++){
+                   if(users[i].getCards()[j].getNumber() == name){
+                       users[i].changePin(name, pin);
+                   }
+               }
+           }
+
+       }
+        qDebug() <<a_query.lastError();
 }
 
 void Db::unblockCard(const char * a)

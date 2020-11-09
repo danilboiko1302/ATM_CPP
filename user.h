@@ -19,6 +19,7 @@ public:
     User& operator=(const User&);
     void blockCard (const char* );
     void blockCard (const QString& );
+    void changePin (const QString&, const QString& );
     void unblockCard (const char* );
     void unblockCard (const QString& );
     void getCash(const QString& a, const int b);

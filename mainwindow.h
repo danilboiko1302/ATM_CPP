@@ -85,6 +85,7 @@ private slots:
     void on_insertCash_clicked();
 
 private:
+    void setDefault();
     void checkBlockCard(const size_t);
 
     void giveCash(const int);
