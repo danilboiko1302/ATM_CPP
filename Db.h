@@ -27,7 +27,7 @@ public:
     void changePin (const QString&,const QString& );
     void unblockCard (const char* );
     void unblockCard (const QString& );
-    void getCash(const int);
+    void getCash(const QString& ,const int);
     void sendMoney(const QString& from, const QString& to, const int amount);
 //    User getCurrentUser() const;
 //    void setCurrentUser(const User value);

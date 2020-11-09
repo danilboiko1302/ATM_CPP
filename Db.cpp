@@ -159,7 +159,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     db.setUserName(user);
     db.setPassword(password);
     db.open();
-    //backUp();
+   // backUp();
      QSqlQuery a_query;
     if (!a_query.exec("SELECT * FROM user")) {
         qDebug() << "Даже селект не получается, я пас.";
@@ -185,6 +185,21 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
         int userid = a_query.value(6).toInt();
         Card res (number, pin, type, balance,status,userid);
         users[userid-1].addCard(res);
+
+         cout<<res<<endl;
+    }
+
+    if (!a_query.exec("SELECT * FROM trans")) {
+        qDebug() << "Даже селект не получается, я пас.";
+       // return -2;
+    }
+    while (a_query.next()) {
+        QString datetime = a_query.value(1).toString();
+        int amount= a_query.value(2).toInt();
+        QString sender = a_query.value(3).toString();
+         QString recipient = a_query.value(4).toString();
+        Transaction res (datetime, amount, sender, recipient);
+        transactions.add(res);
 
          cout<<res<<endl;
     }
@@ -261,32 +276,62 @@ void Db::unblockCard(const QString & a)
        qDebug() <<a_query.lastError();
 }
 
-void Db::getCash(const int a)
+void Db::getCash(const QString& number,const int amount)
 {
-    char balance[11];
-    sprintf(balance, "%d", currentCard.getBalance() - a);
-    qDebug() <<balance;
-    QSqlQuery a_query;
-    QString str_insert = "UPDATE  card  SET balance=%1 WHERE number='%2';";
-        QString   str = str_insert.arg(balance).arg(currentCard.getNumber());
-        bool res = a_query.exec(str);
-       if(res){
-             currentCard.setBalance(currentCard.getBalance() - a);
-             for(size_t i =0; i < users.sizes(); i++){
-                 for(size_t j =0; j < users[i].getCards().sizes(); j++){
-                     if(users[i].getCards()[j].getNumber() == currentCard.getNumber()){
-                         users[i].getCash(currentCard.getNumber(),a);
-                     }
-                 }
-             }
 
-       }
-       qDebug() <<a_query.lastError();
+    for(size_t i =0; i < users.sizes(); i++){
+        for(size_t j =0; j < users[i].getCards().sizes(); j++){
+            if(users[i].getCards()[j].getNumber() == number){
+                users[i].getCash(number,amount);
+                QSqlQuery a_query;
+                QString str_insert = "UPDATE  card  SET balance=%1 WHERE number='%2';";
+                    QString   str = str_insert.arg(users[i].getCards()[j].getBalance()).arg(number);
+                    if(!a_query.exec(str)){
+                        qDebug() <<a_query.lastError();
+                    }
+
+
+
+
+                if(currentCard.getNumber() == number){
+                    currentCard.setBalance(currentCard.getBalance()-amount);
+                }
+
+            }
+        }
+    }
+
 
        getCardAll().show();
 }
 
 void Db::sendMoney(const QString &from, const QString &to, const int amount)
 {
-    qDebug() << from + "  to  " + to + "  amount: " + amount;
+    qDebug() << from + "  to  " + to + "  amount: " + QString::number(amount);
+
+    QSqlQuery a_query;
+    QString str_insert = "INSERT INTO trans VALUES (%1, '%2', %3, '%4', '%5');";
+        QString   str = str_insert
+                .arg(QString::number(transactions.sizes()+1))
+                .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss"))
+                .arg(QString::number(amount))
+                .arg(from)
+                .arg(to);
+
+       if(a_query.exec(str)){
+           if (currentCard.getNumber() == from){
+               currentCard.setBalance(currentCard.getBalance() - amount);
+           } else if (currentCard.getNumber() == to){
+               currentCard.setBalance(currentCard.getBalance() + amount);
+           }
+            getCash(from,amount);
+            getCash(to,-amount);
+
+
+       } else {
+            qDebug() <<a_query.lastError();
+       }
+
+
+       getCardAll().show();
 }
