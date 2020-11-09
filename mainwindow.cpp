@@ -20,10 +20,10 @@ MainWindow::MainWindow(QWidget *parent)
      ui->addCash->close();
     ui->insertCash->setDisabled(true);
    // debug
-//    {
-//        ui->mainWindow->show();
-//        ui->empty->close();
-//    }
+    {
+        ui->mainWindow->show();
+        ui->empty->close();
+    }
 
     ui->mainWindow->setText("1 Change card\n\n"
                       "2 Check balance\n\n"
@@ -43,6 +43,50 @@ MainWindow::MainWindow(QWidget *parent)
                       "6 another amount\n\n"
                       "8 Exit"
                       );
+    {
+        QGridLayout *layout = new QGridLayout();
+        QPushButton *b1 = new QPushButton();
+        QPushButton *b2 = new QPushButton();
+        QPushButton *b3 = new QPushButton();
+        QPushButton *b4 = new QPushButton();
+        QPushButton *b5 = new QPushButton();
+        QPushButton *b6 = new QPushButton();
+        QPushButton *b7 = new QPushButton();
+        QPushButton *b8 = new QPushButton();
+        QPushButton *b9 = new QPushButton();
+        QPushButton *b10 = new QPushButton();
+        b1->setText("1");
+        b2->setText("2");
+        b3->setText("5");
+        b4->setText("10");
+        b5->setText("20");
+        b6->setText("50");
+        b7->setText("100");
+        b8->setText("200");
+        b9->setText("500");
+        b10->setText("1000");
+        connect(b1, SIGNAL (clicked()), this, SLOT (b1()));
+        connect(b2, SIGNAL (clicked()), this, SLOT (b2()));
+        connect(b3, SIGNAL (clicked()), this, SLOT (b3()));
+        connect(b4, SIGNAL (clicked()), this, SLOT (b4()));
+        connect(b5, SIGNAL (clicked()), this, SLOT (b5()));
+        connect(b6, SIGNAL (clicked()), this, SLOT (b6()));
+        connect(b7, SIGNAL (clicked()), this, SLOT (b7()));
+        connect(b8, SIGNAL (clicked()), this, SLOT (b8()));
+        connect(b9, SIGNAL (clicked()), this, SLOT (b9()));
+        connect(b10, SIGNAL (clicked()), this, SLOT (b10()));
+        layout->addWidget(b1);
+        layout->addWidget(b2);
+        layout->addWidget(b3);
+        layout->addWidget(b4);
+        layout->addWidget(b5);
+        layout->addWidget(b6);
+        layout->addWidget(b7);
+        layout->addWidget(b8);
+        layout->addWidget(b9);
+        layout->addWidget(b10);
+        wdg->setLayout(layout);
+    }
 
 }
 
@@ -51,57 +95,56 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::changeSumCash(const int a)
+{
+    ui->sum->setText(QString::number(ui->sum->text().toInt() + a));
+    ui->addCash->setText("Current amount: " + ui->sum->text());
+    wdg->close();
+}
+
 void MainWindow::b1()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  1");
-    wdg->close();
 
+    changeSumCash(1);
 }
 
 void MainWindow::b2()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  2");
-    wdg->close();
+     changeSumCash(2);
 }
 void MainWindow::b3()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  5");
-    wdg->close();
+   changeSumCash(5);
 }
 void MainWindow::b4()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  10");
-    wdg->close();
+     changeSumCash(10);
 }
 void MainWindow::b5()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  20");
-    wdg->close();
+     changeSumCash(20);
 }
 void MainWindow::b6()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  50");
-    wdg->close();
+     changeSumCash(50);
 }
 void MainWindow::b7()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  100");
-    wdg->close();
+     changeSumCash(100);
 }
 void MainWindow::b8()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  200");
-    wdg->close();
+    changeSumCash(200);
 }
 void MainWindow::b9()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  500");
-    wdg->close();
+     changeSumCash(500);
 }
 void MainWindow::b10()
 {
-    ui->addCash->setText(ui->addCash->toPlainText() + "  1000");
-    wdg->close();
+
+     changeSumCash(1000);
 }
 
 
@@ -277,7 +320,9 @@ void MainWindow::on_screen4_clicked()
     if(!ui->mainWindow->isHidden()){
         ui->mainWindow->close();
         ui->addCash->show();
+
         ui->insertCash->setDisabled(false);
+        ui->addCash->setText("Current amount: " + ui->sum->text());
 
     } else if(!ui->cards->isHidden()){
             if(database.getCurrentUser().getCards().sizes() > 3){
@@ -522,48 +567,9 @@ void MainWindow::on_insertCash_clicked()
 
 
     //hide();
-    QGridLayout *layout = new QGridLayout();
-    QPushButton *b1 = new QPushButton();
-    QPushButton *b2 = new QPushButton();
-    QPushButton *b3 = new QPushButton();
-    QPushButton *b4 = new QPushButton();
-    QPushButton *b5 = new QPushButton();
-    QPushButton *b6 = new QPushButton();
-    QPushButton *b7 = new QPushButton();
-    QPushButton *b8 = new QPushButton();
-    QPushButton *b9 = new QPushButton();
-    QPushButton *b10 = new QPushButton();
-    b1->setText("1");
-    b2->setText("2");
-    b3->setText("5");
-    b4->setText("10");
-    b5->setText("20");
-    b6->setText("50");
-    b7->setText("100");
-    b8->setText("200");
-    b9->setText("500");
-    b10->setText("1000");
-    connect(b1, SIGNAL (clicked()), this, SLOT (b1()));
-    connect(b2, SIGNAL (clicked()), this, SLOT (b2()));
-    connect(b3, SIGNAL (clicked()), this, SLOT (b3()));
-    connect(b4, SIGNAL (clicked()), this, SLOT (b4()));
-    connect(b5, SIGNAL (clicked()), this, SLOT (b5()));
-    connect(b6, SIGNAL (clicked()), this, SLOT (b6()));
-    connect(b7, SIGNAL (clicked()), this, SLOT (b7()));
-    connect(b8, SIGNAL (clicked()), this, SLOT (b8()));
-    connect(b9, SIGNAL (clicked()), this, SLOT (b9()));
-    connect(b10, SIGNAL (clicked()), this, SLOT (b10()));
-    layout->addWidget(b1);
-    layout->addWidget(b2);
-    layout->addWidget(b3);
-    layout->addWidget(b4);
-    layout->addWidget(b5);
-    layout->addWidget(b6);
-    layout->addWidget(b7);
-    layout->addWidget(b8);
-    layout->addWidget(b9);
-    layout->addWidget(b10);
-    wdg->setLayout(layout);
+
     wdg->show();
     //a->on_pushButton_clicked();
 }
+
+

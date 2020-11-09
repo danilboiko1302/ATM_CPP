@@ -23,6 +23,7 @@ public:
 
 private slots:
 
+
     void b1();
 
     void b2();
@@ -84,6 +85,8 @@ private slots:
     void on_insertCash_clicked();
 
 private:
+    void changeSumCash(const int);
+
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

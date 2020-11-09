@@ -143,8 +143,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QTextBrowser" name="textBrowser_2">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>20</y>
+      <x>640</x>
+      <y>30</y>
       <width>256</width>
       <height>201</height>
      </rect>
@@ -502,6 +502,19 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QLabel" name="sum">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>150</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </widget>
    <zorder>mainWindow</zorder>
    <zorder>screen4</zorder>
    <zorder>screen3</zorder>
@@ -529,13 +542,14 @@ p, li { white-space: pre-wrap; }
    <zorder>pin</zorder>
    <zorder>empty</zorder>
    <zorder>pins</zorder>
-   <zorder>textBrowser_2</zorder>
    <zorder>cash</zorder>
    <zorder>trans</zorder>
    <zorder>pushButton</zorder>
    <zorder>insertCash</zorder>
    <zorder>cards</zorder>
    <zorder>addCash</zorder>
+   <zorder>sum</zorder>
+   <zorder>textBrowser_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
