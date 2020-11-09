@@ -90,7 +90,7 @@ private:
 
     void setButtonOn();
 
-    void sendMoney(const size_t);
+
 
     void setDefault();
 

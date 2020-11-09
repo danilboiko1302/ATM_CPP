@@ -62,7 +62,6 @@ void Db::backUp()
     str = "CREATE TABLE trans ("
                     "idtransaction integer PRIMARY KEY NOT NULL, "
                     "datetime DATETIME NOT NULL, "
-                    "status VARCHAR(255) NOT NULL, "
                     "amount integer NOT NULL, "
                     "senderCard VARCHAR(45) NOT NULL, "
                     "recipientCard VARCHAR(45) NOT NULL"
@@ -151,7 +150,7 @@ Sequence<Card> &Db::getCardAll()
 
 Sequence<Transaction> &Db::getTransactionAll()
 {
-
+    return transactions;
 }
 
 Db::Db(const char* host,const char* schema,const char* user,const char* password){
@@ -285,4 +284,9 @@ void Db::getCash(const int a)
        qDebug() <<a_query.lastError();
 
        getCardAll().show();
+}
+
+void Db::sendMoney(const QString &from, const QString &to, const int amount)
+{
+    qDebug() << from + "  to  " + to + "  amount: " + amount;
 }

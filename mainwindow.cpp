@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent)
                       "8 Exit"
                       );
 
+
     {
         QGridLayout *layout = new QGridLayout();
         QPushButton *b1 = new QPushButton();
@@ -88,7 +89,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::changeSumCash(const int a)
 {
@@ -230,8 +230,6 @@ void MainWindow::on_screen1_clicked()
         ui->addCash->close();
         ui->mainWindow->show();
         ui->sum->setText("0");
-    } else if(!ui->trans->isHidden()){
-        sendMoney(0);
     }
 
 }
@@ -251,8 +249,6 @@ void MainWindow::on_screen2_clicked()
 
         } else if(!ui->cash->isHidden()){
         giveCash(100);
-    } else if(!ui->trans->isHidden()){
-        sendMoney(1);
     }
 }
 
@@ -267,8 +263,6 @@ void MainWindow::on_screen3_clicked()
 
         } else if(!ui->cash->isHidden()){
        giveCash(200);
-    } else if(!ui->trans->isHidden()){
-        sendMoney(2);
     }
 }
 void MainWindow::on_screen4_clicked()
@@ -286,30 +280,48 @@ void MainWindow::on_screen4_clicked()
 
         } else if(!ui->cash->isHidden()){
           giveCash(500);
-    } else if(!ui->trans->isHidden()){
-        sendMoney(3);
     }
 }
 
 void MainWindow::on_screen5_clicked()
 {
     if(!ui->mainWindow->isHidden()){
-        ui->mainWindow->close();
-        ui->trans->setText("");
-        for(size_t i = 0; i< database.currentUser.getCards().sizes(); ++i){
-            ui->trans->setText(ui->trans->toPlainText() + QString::number(i+1) + " " + database.currentUser.getCards()[i].getNumber() + "\n");
-        }
-        ui->trans->setText(ui->trans->toPlainText() + QString::number(database.currentUser.getCards().sizes()+1) + " Other Card\n");
-        ui->trans->setText(ui->trans->toPlainText() + "8 Exit");
-        ui->trans->show();
+        bool ok;
+        QString card;
+        int amount;
+        do{
+             card = QInputDialog::getText(this, tr("Input Card"),
+                                                    tr("Card: "), QLineEdit::Normal,
+                                                    "", &ok);
+            if(!ok) return;
+             qDebug() << card.length();
+              qDebug() << card.toULongLong();
+            if(card.length() != 16 || card.toULongLong() == 0){
+                QMessageBox::warning(this, tr("Error"),
+                                               tr("Wrong input card"));
+            }
+
+        } while (card.length() != 16 || card.toULongLong() == 0);
+        do{
+             amount = QInputDialog::getInt(this, tr("Input Amount"),
+                                                    tr("Amount: "), QLineEdit::Normal
+                                                    );
+
+             if(amount == 0) return;
+            if(amount < 0){
+                QMessageBox::warning(this, tr("Error"),
+                                               tr("Wrong input amount"));
+            }
+
+        } while (amount < 0);
+
+        database.sendMoney(database.currentCard.getNumber(), card, amount);
 
     } else if(!ui->cards->isHidden()){
              checkBlockCard(4);
 
         } else if(!ui->cash->isHidden()){
         giveCash(1000);
-    } else if(!ui->trans->isHidden()){
-        sendMoney(4);
     }
 }
 void MainWindow::on_screen6_clicked()
@@ -364,8 +376,6 @@ void MainWindow::on_screen6_clicked()
             giveCash(res);
         }
 
-    } else if(!ui->trans->isHidden()){
-        sendMoney(5);
     }
 }
 
@@ -420,10 +430,6 @@ void MainWindow::on_screen7_clicked()
 
         } while (text.length() < 4 || res <= 0);
 
-    } else if(!ui->cards->isHidden()){
-            checkBlockCard(6);
-        } else if(!ui->trans->isHidden()){
-        sendMoney(6);
     }
 }
 void MainWindow::on_screen8_clicked()
@@ -435,10 +441,6 @@ void MainWindow::on_screen8_clicked()
     } else if(!ui->cash->isHidden()){
         ui->mainWindow->show();
         ui->cash->close();
-
-    } else if(!ui->trans->isHidden()){
-        ui->mainWindow->show();
-        ui->trans->close();
 
     }
 }
@@ -588,17 +590,7 @@ void MainWindow::setButtonOn()
     ui->cancel->setDisabled(false);
 }
 
-void MainWindow::sendMoney(const size_t a)
-{
-    if(database.currentUser.getCards().sizes() == a){
-        qDebug() << "Other Card";
-    } else if(database.currentUser.getCards().sizes() > a){
-        qDebug() << "Trans from: ";
-        qDebug() << database.currentCard.getNumber();
-        qDebug() << "To: ";
-        qDebug() << database.currentUser.getCards()[a].getNumber();
-    }
-}
+
 
 void MainWindow::setDefault()
 {
@@ -606,7 +598,7 @@ void MainWindow::setDefault()
     ui->mainWindow->close();
     ui->pin->close();
     ui->cash->close();
-    ui->trans->close();
+
 
     ui->cards->close();
     ui->addCash->close();
