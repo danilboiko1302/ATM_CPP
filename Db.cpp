@@ -20,6 +20,70 @@ void Db::setCurrentCard(const Card &value)
     currentCard = value;
 }
 
+void Db::backUp()
+{
+    QSqlQuery a_query;
+    QString str = "DROP TABLE user;";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "DROP TABLE card;";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "DROP TABLE trans;";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "CREATE TABLE user ("
+                    "iduser integer PRIMARY KEY NOT NULL, "
+                    "name VARCHAR(255) UNIQUE, "
+                    ");";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "CREATE TABLE card ("
+                    "idcard integer PRIMARY KEY NOT NULL, "
+                    "number VARCHAR(45) NOT NULL UNIQUE, "
+                    "pin VARCHAR(45) NOT NULL, "
+                    "type VARCHAR(45) NOT NULL, "
+                    "balance integer NOT NULL, "
+                    "status VARCHAR(45) NOT NULL, "
+                    "user integer NOT NULL"
+                    ");";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "CREATE TABLE trans ("
+                    "idtransaction integer PRIMARY KEY NOT NULL, "
+                    "datetime DATETIME NOT NULL, "
+                    "status VARCHAR(255) NOT NULL, "
+                    "amount integer NOT NULL, "
+                    "senderCard VARCHAR(45) NOT NULL, "
+                    "recipientCard VARCHAR(45) NOT NULL"
+                    ");";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "INSERT INTO user VALUES (1, 'Danya');";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "INSERT INTO user VALUES (2, 'Andreyw');";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "INSERT INTO card VALUES (1, '4144785936257485', '1234', 'debit', 1000, 'active', 1);";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+    str = "INSERT INTO card VALUES (1, '4144785936257478', '3636', 'debit', 1000, 'active', 1);";
+    if(!a_query.exec(str)){
+         qDebug() <<a_query.lastError();
+    }
+
+}
+
 bool Db::addUser(const char * a)
 {
     char str1[11];
