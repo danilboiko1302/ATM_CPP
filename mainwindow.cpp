@@ -303,7 +303,30 @@ void MainWindow::on_screen5_clicked()
 }
 void MainWindow::on_screen6_clicked()
 {
-    if(!ui->cards->isHidden()){
+    if(!ui->mainWindow->isHidden()){
+        QMessageBox msgBox;
+        QString temp ("You want to block your current card ");
+        temp += database.currentCard.getNumber();
+        msgBox.setText(temp);
+        msgBox.setInformativeText("Are you sure?");
+        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+        int ret = msgBox.exec();
+        switch (ret) {
+          case QMessageBox::Ok:
+              // Save was clicked
+               database.blockCard(database.currentCard.getNumber());
+               QMessageBox::warning(this, tr("Error"),
+                                              tr("Your Card is Blocked now"));
+              break;
+          case QMessageBox::Cancel:
+              break;
+          default:
+              // should never be reached
+              break;
+        }
+
+    } else if(!ui->cards->isHidden()){
             checkBlockCard(5);
 
         } else if(!ui->cash->isHidden()){
