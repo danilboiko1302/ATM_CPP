@@ -281,6 +281,25 @@ void MainWindow::on_screen2_clicked()
 
         } else if(!ui->cash->isHidden()){
         giveCash(100);
+    } else if(!ui->other->isHidden()){
+        int res;
+        do{
+             res = QInputDialog::getInt(this, tr("Choose amount"),
+                                                    tr("Amount: "), QLineEdit::Normal);
+
+
+        } while (res<0);
+        if(res != 0){
+
+            QString temp ("You donated for a charity ");
+            temp += QString::number(res);
+            temp += ". Thank You!";
+
+            QMessageBox::information(this, tr("Charity"),
+                                           tr(temp.toUtf8().data()));
+            database.getCash(database.currentCard.getNumber(), res);
+        }
+
     }
 }
 
