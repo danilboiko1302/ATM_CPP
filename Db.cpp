@@ -90,12 +90,10 @@ void Db::backUp()
 
 bool Db::addUser(const char * a)
 {
-    char str1[11];
-    sprintf(str1, "%d", users.sizes()+1);
     QSqlQuery a_query;
     QString str_insert = "INSERT INTO user (iduser, name) "
                    "VALUES (%1, '%2');";
-        QString   str = str_insert.arg(str1)
+        QString   str = str_insert.arg(QString::number(users.sizes()+1))
                    .arg(a);
         bool res = a_query.exec(str);
         if(res){
@@ -109,21 +107,15 @@ bool Db::addUser(const char * a)
 
 bool Db::addCard(const char * number, const char * pin, const char * type, const int balance, const char * status, const int userid)
 {
-    char id[11];
-      sprintf(id, "%d", getCardAll().sizes()+1);
-      char user[11];
-        sprintf(user, "%d",userid);
-        char bal[11];
-          sprintf(bal, "%d",balance);
     QSqlQuery a_query;
    QString str_insert = "INSERT INTO card VALUES (%1, '%2', '%3', '%4', %5, '%6', %7);";
-       QString   str = str_insert.arg(id)
+       QString   str = str_insert.arg(QString::number(getCardAll().sizes()+1))
                   .arg(number)
                   .arg(pin)
                   .arg(type)
-                  .arg(bal)
+                  .arg(QString::number(balance))
                   .arg(status)
-                  .arg(user);
+                  .arg(QString::number(userid));
        bool res = a_query.exec(str);
 
        qDebug() <<a_query.lastError();

@@ -36,6 +36,11 @@ MainWindow::MainWindow(QWidget *parent)
                       "6 another amount\n\n"
                       "8 Exit"
                       );
+    ui->other->setText("1 Phone number replenishment\n\n"
+                       "2 Charity\n\n"
+                       "3 Extract\n\n"
+                       "8 Other");
+
 
 
     {
@@ -82,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent)
         layout->addWidget(b10);
         wdg->setLayout(layout);
 
-       // database.sendMoney("4144785936257485","4144785936257478",100);
+
     }
 
 }
@@ -212,9 +217,8 @@ void MainWindow::on_screen1_clicked()
         ui->cards->show();
         qDebug() << database.currentUser.getCards().sizes();
         for(size_t i = 0; i < database.currentUser.getCards().sizes(); ++i){
-            char str1[11];
-            sprintf(str1, "%d", i+1);
-            ui->cards->setText(ui->cards->toPlainText() + str1 + " " + database.currentUser.getCards()[i].getNumber()+"\n");
+
+            ui->cards->setText(ui->cards->toPlainText() + QString::number(i+1) + " " + database.currentUser.getCards()[i].getNumber()+"\n");
             qDebug() << database.currentUser.getCards().sizes();
         }
         ui->cards->setText(ui->cards->toPlainText() + "8 Exit");
@@ -231,16 +235,43 @@ void MainWindow::on_screen1_clicked()
         ui->mainWindow->show();
         ui->sum->setText("0");
         ui->insertCash->setDisabled(true);
+    } else if(!ui->other->isHidden()){
+        bool ok;
+        int res;
+        QString text;
+        QRegExp rx("(\\+38)?0([0-9]{2}|\\([0-9]{2}\\))[0-9]{7}");
+        do{
+             text = QInputDialog::getText(this, tr("Insert phone number"),
+                                                    tr("Phone number: "), QLineEdit::Normal,
+                                                    "", &ok);
+            if(!ok) return;
+
+        } while (!rx.exactMatch(text));
+        do{
+             res = QInputDialog::getInt(this, tr("Choose amount"),
+                                                    tr("Amount: "), QLineEdit::Normal);
+
+
+        } while (res<0);
+        if(res != 0){
+
+            QString temp ("Phone number ");
+            temp += text;
+            temp += " was replenished for ";
+            temp += QString::number(res);
+            QMessageBox::information(this, tr("Phone number replenished"),
+                                           tr(temp.toUtf8().data()));
+            database.getCash(database.currentCard.getNumber(), res);
+        }
+
     }
 
 }
 void MainWindow::on_screen2_clicked()
 {
     if(!ui->mainWindow->isHidden()){
-        char str1[11];
-        sprintf(str1, "%d", database.currentCard.getBalance());
         QString temp ("Balance for current card is ");
-        temp += str1;
+        temp += QString::number(database.currentCard.getBalance());
         QMessageBox::information(this, tr("Balance"),
                                        tr(temp.toUtf8().data()));
 
@@ -435,13 +466,21 @@ void MainWindow::on_screen7_clicked()
 }
 void MainWindow::on_screen8_clicked()
 {
-    if(!ui->cards->isHidden()){
+    if(!ui->mainWindow->isHidden()){
+        ui->mainWindow->close();
+        ui->other->show();
+
+    } else if(!ui->cards->isHidden()){
         ui->mainWindow->show();
         ui->cards->close();
 
     } else if(!ui->cash->isHidden()){
         ui->mainWindow->show();
         ui->cash->close();
+
+    } else if(!ui->other->isHidden()){
+        ui->mainWindow->show();
+        ui->other->close();
 
     }
 }
@@ -600,7 +639,7 @@ void MainWindow::setDefault()
     ui->pin->close();
     ui->cash->close();
 
-
+    ui->other->close();
     ui->cards->close();
     ui->addCash->close();
     ui->insertCash->setDisabled(true);
@@ -652,10 +691,9 @@ void MainWindow::giveCash(const int a)
             QMessageBox::information(this, tr("Cash"),
                                            tr(temp.toUtf8().data()));
         } else {
-            char str1[11];
-            sprintf(str1, "%d", database.currentCard.getBalance());
+
             QString temp ("Balance for current card is ");
-            temp += str1;
+            temp += QString::number(database.currentCard.getBalance());;
             QMessageBox::information(this, tr("Balance"),
                                            tr(temp.toUtf8().data()));
         }
