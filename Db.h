@@ -11,7 +11,10 @@ private:
     Sequence <User> users;
     Sequence <Transaction> transactions;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+
 public:
+    void backUp();
+
     bool addUser(const char*);
     bool addCard(const char*,const char*,const char*,const int,const char*,const int);
     bool addTransaction(const char*);

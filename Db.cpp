@@ -26,21 +26,26 @@ void Db::backUp()
     QString str = "DROP TABLE user;";
     if(!a_query.exec(str)){
          qDebug() <<a_query.lastError();
+         qDebug() <<"DROP TABLE user;";
     }
     str = "DROP TABLE card;";
     if(!a_query.exec(str)){
          qDebug() <<a_query.lastError();
+         qDebug() <<"DROP TABLE card;";
     }
     str = "DROP TABLE trans;";
     if(!a_query.exec(str)){
          qDebug() <<a_query.lastError();
+          qDebug() <<"DROP TABLE trans;";
     }
     str = "CREATE TABLE user ("
                     "iduser integer PRIMARY KEY NOT NULL, "
-                    "name VARCHAR(255) UNIQUE, "
+                    "name VARCHAR(255) UNIQUE"
                     ");";
     if(!a_query.exec(str)){
          qDebug() <<a_query.lastError();
+
+         qDebug() <<"CREATE TABLE users;";
     }
     str = "CREATE TABLE card ("
                     "idcard integer PRIMARY KEY NOT NULL, "
@@ -77,7 +82,7 @@ void Db::backUp()
     if(!a_query.exec(str)){
          qDebug() <<a_query.lastError();
     }
-    str = "INSERT INTO card VALUES (1, '4144785936257478', '3636', 'debit', 1000, 'active', 1);";
+    str = "INSERT INTO card VALUES (2, '4144785936257478', '3636', 'debit', 1000, 'active', 1);";
     if(!a_query.exec(str)){
          qDebug() <<a_query.lastError();
     }
@@ -155,6 +160,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     db.setUserName(user);
     db.setPassword(password);
     db.open();
+    backUp();
      QSqlQuery a_query;
     if (!a_query.exec("SELECT * FROM user")) {
         qDebug() << "Даже селект не получается, я пас.";
@@ -162,6 +168,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     }
     while (a_query.next()) {
         users.add(*(new User(a_query.value(1).toString().toUtf8().data())));
+         qDebug()<<a_query.value(1).toString()<<endl;
        // qDebug() << a_query.value(0).toInt();
     }
     if (!a_query.exec("SELECT * FROM card")) {
@@ -179,7 +186,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
         int userid = a_query.value(6).toInt();
         Card res (number, pin, type, balance,status,userid);
         users[userid-1].addCard(res);
-         cout<<a_query.value(0).toInt()<<endl;
+
          cout<<res<<endl;
     }
 
