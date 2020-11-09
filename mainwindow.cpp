@@ -314,6 +314,24 @@ void MainWindow::on_screen3_clicked()
 
         } else if(!ui->cash->isHidden()){
        giveCash(200);
+    } else if(!ui->other->isHidden()){
+        QString res ("");
+       for(size_t i = 0; i<database.getTransactionAll().sizes(); ++i){
+           if(database.getTransactionAll()[i].getRecipient() == database.currentCard.getNumber() ||
+                  database.getTransactionAll()[i].getSender() == database.currentCard.getNumber() ){
+               res += database.getTransactionAll()[i];
+               res +="\n";
+           }
+       }
+       if(res == ""){
+           QMessageBox::information(this, tr("Extract"),
+                                          tr("Extract is empty"));
+       } else {
+           QMessageBox::information(this, tr("Extract"),
+                                          tr(res.toUtf8().data()));
+       }
+
+
     }
 }
 void MainWindow::on_screen4_clicked()

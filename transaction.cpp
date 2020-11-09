@@ -70,6 +70,14 @@ Transaction &Transaction::operator=(const Transaction & a)
     return *this;
 }
 
+Transaction::operator QString() const
+{
+    QString res ("");
+    res += "Transaction from: " + getSender() + " to: " + getRecipient();
+    res += " time: " + getDatetime() + " amount: " + QString::number(getAmount());
+    return res;
+}
+
 ostream &operator<<(ostream &os, const Transaction & trans)
 {
     os << "Transaction from: " << trans.getSender().toUtf8().data() << " to: " << trans.getRecipient().toUtf8().data() ;

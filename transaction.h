@@ -16,6 +16,7 @@ public:
     Transaction(const QString&, const int, const QString&,const QString&);
     Transaction(const Transaction&);
     Transaction& operator=(const Transaction&);
+    operator QString () const;
     QString getDatetime() const;
     void setDatetime(const QString &value);
     int getAmount() const;
