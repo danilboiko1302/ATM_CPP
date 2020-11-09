@@ -2,6 +2,8 @@
 #define TRANSACTION_H
 #include <QApplication>
 
+#include "Sequence.h"
+#include "card.h"
 class Transaction
 {
 private:
@@ -23,5 +25,5 @@ public:
     QString getRecipient() const;
     void setRecipient(const QString &value);
 };
-
+ ostream& operator<<(ostream& os, const Transaction& user);
 #endif // TRANSACTION_H

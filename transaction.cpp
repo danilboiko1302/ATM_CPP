@@ -69,3 +69,10 @@ Transaction &Transaction::operator=(const Transaction & a)
     this->recipient = a.recipient;
     return *this;
 }
+
+ostream &operator<<(ostream &os, const Transaction & trans)
+{
+    os << "Transaction from: " << trans.getSender().toUtf8().data() << " to: " << trans.getRecipient().toUtf8().data() ;
+    os << " time: " << trans.getDatetime().toUtf8().data()<<" amount: "<<trans.getAmount();
+    return os;
+}
