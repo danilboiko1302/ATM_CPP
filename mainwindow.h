@@ -85,7 +85,15 @@ private slots:
     void on_insertCash_clicked();
 
 private:
+
+    void setButtonOff();
+
+    void setButtonOn();
+
+    void sendMoney(const size_t);
+
     void setDefault();
+
     void checkBlockCard(const size_t);
 
     void giveCash(const int);

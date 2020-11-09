@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
 //        ui->mainWindow->show();
 //        ui->empty->close();
 //    }
-
+    setWindowTitle("ATM");
     ui->mainWindow->setText("1 Change card\n\n"
                       "2 Check balance\n\n"
                       "3 Get cash\n\n"
@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
                       "6 another amount\n\n"
                       "8 Exit"
                       );
+
     {
         QGridLayout *layout = new QGridLayout();
         QPushButton *b1 = new QPushButton();
@@ -188,7 +189,7 @@ void MainWindow::on_insertCard_clicked()
                  ui->firstWindow->show();
                  ui->pins->setText("3");
                   ui->insertCard->setDisabled(true);
-
+                    setButtonOn();
                  break;
              }
 
@@ -229,6 +230,8 @@ void MainWindow::on_screen1_clicked()
         ui->addCash->close();
         ui->mainWindow->show();
         ui->sum->setText("0");
+    } else if(!ui->trans->isHidden()){
+        sendMoney(0);
     }
 
 }
@@ -248,6 +251,8 @@ void MainWindow::on_screen2_clicked()
 
         } else if(!ui->cash->isHidden()){
         giveCash(100);
+    } else if(!ui->trans->isHidden()){
+        sendMoney(1);
     }
 }
 
@@ -262,6 +267,8 @@ void MainWindow::on_screen3_clicked()
 
         } else if(!ui->cash->isHidden()){
        giveCash(200);
+    } else if(!ui->trans->isHidden()){
+        sendMoney(2);
     }
 }
 void MainWindow::on_screen4_clicked()
@@ -279,16 +286,30 @@ void MainWindow::on_screen4_clicked()
 
         } else if(!ui->cash->isHidden()){
           giveCash(500);
+    } else if(!ui->trans->isHidden()){
+        sendMoney(3);
     }
 }
 
 void MainWindow::on_screen5_clicked()
 {
-    if(!ui->cards->isHidden()){
+    if(!ui->mainWindow->isHidden()){
+        ui->mainWindow->close();
+        ui->trans->setText("");
+        for(size_t i = 0; i< database.currentUser.getCards().sizes(); ++i){
+            ui->trans->setText(ui->trans->toPlainText() + QString::number(i+1) + " " + database.currentUser.getCards()[i].getNumber() + "\n");
+        }
+        ui->trans->setText(ui->trans->toPlainText() + QString::number(database.currentUser.getCards().sizes()+1) + " Other Card\n");
+        ui->trans->setText(ui->trans->toPlainText() + "8 Exit");
+        ui->trans->show();
+
+    } else if(!ui->cards->isHidden()){
              checkBlockCard(4);
 
         } else if(!ui->cash->isHidden()){
         giveCash(1000);
+    } else if(!ui->trans->isHidden()){
+        sendMoney(4);
     }
 }
 void MainWindow::on_screen6_clicked()
@@ -343,6 +364,8 @@ void MainWindow::on_screen6_clicked()
             giveCash(res);
         }
 
+    } else if(!ui->trans->isHidden()){
+        sendMoney(5);
     }
 }
 
@@ -399,7 +422,9 @@ void MainWindow::on_screen7_clicked()
 
     } else if(!ui->cards->isHidden()){
             checkBlockCard(6);
-        }
+        } else if(!ui->trans->isHidden()){
+        sendMoney(6);
+    }
 }
 void MainWindow::on_screen8_clicked()
 {
@@ -410,6 +435,10 @@ void MainWindow::on_screen8_clicked()
     } else if(!ui->cash->isHidden()){
         ui->mainWindow->show();
         ui->cash->close();
+
+    } else if(!ui->trans->isHidden()){
+        ui->mainWindow->show();
+        ui->trans->close();
 
     }
 }
@@ -470,6 +499,7 @@ void MainWindow::on_ok_clicked()
      if( ui->pin->toPlainText() == database.currentCard.getPin()){
          QMessageBox::information(this, tr("Wlecome"),
                                         tr("PIN is correct"));
+         setButtonOff();
 
          ui->firstWindow->close();
          ui->mainWindow->show();
@@ -514,6 +544,7 @@ void MainWindow::on_cancel_clicked()
     ui->firstWindow->close();
     ui->mainWindow->close();
     ui->insertCard->setDisabled(false);
+    setButtonOff();
     ui->empty->show();
    }
 }
@@ -525,6 +556,50 @@ void MainWindow::on_insertCash_clicked()
     wdg->show();
 }
 
+void MainWindow::setButtonOff()
+{
+    ui->b1->setDisabled(true);
+    ui->b2->setDisabled(true);
+    ui->b3->setDisabled(true);
+    ui->b4->setDisabled(true);
+    ui->b5->setDisabled(true);
+    ui->b6->setDisabled(true);
+    ui->b7->setDisabled(true);
+    ui->b8->setDisabled(true);
+    ui->b9->setDisabled(true);
+    ui->ok->setDisabled(true);
+    ui->reset->setDisabled(true);
+    ui->cancel->setDisabled(true);
+}
+
+void MainWindow::setButtonOn()
+{
+    ui->b1->setDisabled(false);
+    ui->b2->setDisabled(false);
+    ui->b3->setDisabled(false);
+    ui->b4->setDisabled(false);
+    ui->b5->setDisabled(false);
+    ui->b6->setDisabled(false);
+    ui->b7->setDisabled(false);
+    ui->b8->setDisabled(false);
+    ui->b9->setDisabled(false);
+    ui->ok->setDisabled(false);
+    ui->reset->setDisabled(false);
+    ui->cancel->setDisabled(false);
+}
+
+void MainWindow::sendMoney(const size_t a)
+{
+    if(database.currentUser.getCards().sizes() == a){
+        qDebug() << "Other Card";
+    } else if(database.currentUser.getCards().sizes() > a){
+        qDebug() << "Trans from: ";
+        qDebug() << database.currentCard.getNumber();
+        qDebug() << "To: ";
+        qDebug() << database.currentUser.getCards()[a].getNumber();
+    }
+}
+
 void MainWindow::setDefault()
 {
     ui->firstWindow->close();
@@ -532,6 +607,7 @@ void MainWindow::setDefault()
     ui->pin->close();
     ui->cash->close();
     ui->trans->close();
+
     ui->cards->close();
     ui->addCash->close();
     ui->insertCash->setDisabled(true);
@@ -540,6 +616,18 @@ void MainWindow::setDefault()
     ui->sum->close();
     ui->empty->show();
     ui->insertCard->setDisabled(false);
+    ui->b1->setDisabled(true);
+    ui->b2->setDisabled(true);
+    ui->b3->setDisabled(true);
+    ui->b4->setDisabled(true);
+    ui->b5->setDisabled(true);
+    ui->b6->setDisabled(true);
+    ui->b7->setDisabled(true);
+    ui->b8->setDisabled(true);
+    ui->b9->setDisabled(true);
+    ui->ok->setDisabled(true);
+    ui->reset->setDisabled(true);
+    ui->cancel->setDisabled(true);
 }
 
 void MainWindow::checkBlockCard(const size_t a)
