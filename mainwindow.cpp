@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cards->close();
      ui->addCash->close();
     ui->insertCash->setDisabled(true);
+    ui->pin->close();
+    ui->pins->close();
+    ui->sum->close();
    // debug
 //    {
 //        ui->mainWindow->show();
