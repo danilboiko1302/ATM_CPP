@@ -37,6 +37,7 @@ User:: User(const User & a):  cards(), name (a.getName())
 User &User::operator=(const User & user)
 {
     this->name = user.getName();
+    cards.clear();
     for(size_t i =0; i<user.cards.sizes(); i++){
         this->cards.add(user.cards[i]);
     }

@@ -85,6 +85,10 @@ private slots:
     void on_insertCash_clicked();
 
 private:
+    void checkBlockCard(const size_t);
+
+    void giveCash(const int);
+
     void changeSumCash(const int);
 
     Ui::MainWindow *ui;

@@ -1,24 +1,24 @@
 #include "Db.h"
 
-User Db::getCurrentUser() const
-{
-    return currentUser;
-}
+//User Db::getCurrentUser() const
+//{
+//    return currentUser;
+//}
 
-void Db::setCurrentUser(const User &value)
-{
-    currentUser = value;
-}
+//void Db::setCurrentUser(const User value)
+//{
+//    currentUser = value;
+//}
 
-Card Db::getCurrentCard() const
-{
-    return currentCard;
-}
+//Card Db::getCurrentCard() const
+//{
+//    return currentCard;
+//}
 
-void Db::setCurrentCard(const Card &value)
-{
-    currentCard = value;
-}
+//void Db::setCurrentCard(const Card value)
+//{
+//    currentCard = value;
+//}
 
 void Db::backUp()
 {
@@ -160,7 +160,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     db.setUserName(user);
     db.setPassword(password);
     db.open();
-    backUp();
+    //backUp();
      QSqlQuery a_query;
     if (!a_query.exec("SELECT * FROM user")) {
         qDebug() << "Даже селект не получается, я пас.";
@@ -168,7 +168,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     }
     while (a_query.next()) {
         users.add(*(new User(a_query.value(1).toString().toUtf8().data())));
-         qDebug()<<a_query.value(1).toString()<<endl;
+         qDebug()<<a_query.value(1).toString();
        // qDebug() << a_query.value(0).toInt();
     }
     if (!a_query.exec("SELECT * FROM card")) {

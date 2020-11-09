@@ -6,15 +6,15 @@
 class Db{
 private:
 
-    User currentUser;
-    Card currentCard;
+
     Sequence <User> users;
     Sequence <Transaction> transactions;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 
 public:
     void backUp();
-
+    User currentUser;
+    Card currentCard;
     bool addUser(const char*);
     bool addCard(const char*,const char*,const char*,const int,const char*,const int);
     bool addTransaction(const char*);
@@ -27,10 +27,10 @@ public:
     void unblockCard (const char* );
     void unblockCard (const QString& );
     void getCash(const int);
-    User getCurrentUser() const;
-    void setCurrentUser(const User &value);
-    Card getCurrentCard() const;
-    void setCurrentCard(const Card &value);
+//    User getCurrentUser() const;
+//    void setCurrentUser(const User value);
+//    Card getCurrentCard() const;
+//    void setCurrentCard(const Card value);
 
 };
 
