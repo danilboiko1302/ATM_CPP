@@ -102,7 +102,7 @@ MainWindow::~MainWindow()
 void MainWindow::changeSumCash(const int a)
 {
     ui->sum->setText(QString::number(ui->sum->text().toInt() + a));
-    ui->addCash->setText("Current amount: " + ui->sum->text());
+    ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
     wdg->close();
 }
 
@@ -234,6 +234,11 @@ void MainWindow::on_screen1_clicked()
 
     } else if(!ui->cash->isHidden()){
         giveCash(50);
+    } else if(!ui->addCash->isHidden()){
+        giveCash(-(ui->sum->text().toInt()));
+        ui->addCash->close();
+        ui->mainWindow->show();
+        ui->sum->setText("0");
     }
 
 }
@@ -277,7 +282,7 @@ void MainWindow::on_screen4_clicked()
         ui->addCash->show();
 
         ui->insertCash->setDisabled(false);
-        ui->addCash->setText("Current amount: " + ui->sum->text());
+        ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
 
     } else if(!ui->cards->isHidden()){
              checkBlockCard(3);
@@ -478,11 +483,21 @@ void MainWindow::giveCash(const int a)
                                        tr("Not enough money"));
     } else {
         database.getCash(a);
-        QString temp ("You got ");
-        temp+=QString::number(a);
-        temp+=" dollars";
-        QMessageBox::information(this, tr("Cash"),
-                                       tr(temp.toUtf8().data()));
+        if(a > 0){
+            QString temp ("You got ");
+            temp+=QString::number(a);
+            temp+=" dollars";
+            QMessageBox::information(this, tr("Cash"),
+                                           tr(temp.toUtf8().data()));
+        } else {
+            char str1[11];
+            sprintf(str1, "%d", database.currentCard.getBalance());
+            QString temp ("Balance for current card is ");
+            temp += str1;
+            QMessageBox::information(this, tr("Balance"),
+                                           tr(temp.toUtf8().data()));
+        }
+
     }
 }
 
