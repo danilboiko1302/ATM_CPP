@@ -151,24 +151,6 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     db.setUserName(user);
     db.setPassword(password);
     db.open();
-    {
-        QSqlQuery a_query;
-        QString str = "DROP TABLE user;";
-        if(!a_query.exec(str)){
-             qDebug() <<a_query.lastError();
-             qDebug() <<"DROP TABLE user;";
-        }
-        str = "DROP TABLE card;";
-        if(!a_query.exec(str)){
-             qDebug() <<a_query.lastError();
-             qDebug() <<"DROP TABLE card;";
-        }
-        str = "DROP TABLE trans;";
-        if(!a_query.exec(str)){
-             qDebug() <<a_query.lastError();
-              qDebug() <<"DROP TABLE trans;";
-        }
-    }
    // backUp();
      QSqlQuery a_query;
     if (!a_query.exec("SELECT * FROM user")) {
