@@ -85,9 +85,33 @@ MainWindow::MainWindow(QWidget *parent)
         layout->addWidget(b8);
         layout->addWidget(b9);
         layout->addWidget(b10);
-        wdg->setLayout(layout);
-
-
+        cashWidget->setLayout(layout);
+        QGridLayout *layoutSet = new QGridLayout();
+        QPushButton *s1 = new QPushButton("Turn Off");
+        QString temp ("");
+        temp += "Limit for user ";
+        temp += QString::number(limitCashUser);
+        QPushButton *s2 = new QPushButton(temp);
+        temp = "";
+        temp += "Limit for cash ";
+        temp += QString::number(limitCash);
+        QPushButton *s3 = new QPushButton(temp);
+        temp = "";
+        temp += "Limit for cash insert ";
+        temp += QString::number(limitCashInsert);
+        QPushButton *s4 = new QPushButton(temp);
+        QPushButton *s5 = new QPushButton("Exit");
+        layoutSet->addWidget(s1);
+        layoutSet->addWidget(s2);
+        layoutSet->addWidget(s3);
+        layoutSet->addWidget(s4);
+        layoutSet->addWidget(s5);
+        connect(s1, SIGNAL (clicked()), this, SLOT (s1()));
+        connect(s2, SIGNAL (clicked()), this, SLOT (s2()));
+        connect(s3, SIGNAL (clicked()), this, SLOT (s3()));
+        connect(s4, SIGNAL (clicked()), this, SLOT (s4()));
+        connect(s5, SIGNAL (clicked()), this, SLOT (s5()));
+        settingsWidget->setLayout(layoutSet);
     }
 
 }
@@ -97,11 +121,93 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::s1()
+{
+    if(working){
+        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(1));
+        turnOff();
+        working = !working;
+        q->setText("Turn On");
+    } else {
+        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(1));
+        turnOn();
+        working = !working;
+        q->setText("Turn Off");
+    }
+
+}
+void MainWindow::s2()
+{
+    int res = 0;
+    do{
+         res = QInputDialog::getInt(this, tr("New limit"),
+                                                tr("Limit: "), QLineEdit::Normal);
+
+
+    } while (res<0);
+    if (res != 0){
+        limitCashUser = res;
+        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(2));
+        QString temp ("");
+        temp += "Limit for user ";
+        temp += QString::number(limitCashUser);
+        q->setText(temp);
+        QMessageBox::information(this, tr("Limit"),
+                                       tr(temp.toUtf8().data()));
+    }
+}
+void MainWindow::s3()
+{
+    int res = 0;
+    do{
+         res = QInputDialog::getInt(this, tr("New limit"),
+                                                tr("Limit: "), QLineEdit::Normal);
+
+
+    } while (res<0);
+    if (res != 0){
+        limitCash = res;
+        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(3));
+        QString temp = "";
+        temp += "Limit for cash ";
+        temp += QString::number(limitCash);
+        q->setText(temp);
+        QMessageBox::information(this, tr("Limit"),
+                                       tr(temp.toUtf8().data()));
+    }
+}
+void MainWindow::s4()
+{
+    int res = 0;
+    do{
+         res = QInputDialog::getInt(this, tr("New limit"),
+                                                tr("Limit: "), QLineEdit::Normal);
+
+
+    } while (res<0);
+    if (res != 0){
+        limitCashInsert = res;
+        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(4));
+        QString temp = "";
+        temp += "Limit for cash insert ";
+        temp += QString::number(limitCashInsert);
+        q->setText(temp);
+        QMessageBox::information(this, tr("Limit"),
+                                       tr(temp.toUtf8().data()));
+    }
+}
+
+void MainWindow::s5()
+{
+    settingsWidget->close();
+    this->show();
+}
+
 void MainWindow::changeSumCash(const int a)
 {
     ui->sum->setText(QString::number(ui->sum->text().toInt() + a));
     ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
-    wdg->close();
+    cashWidget->close();
 }
 
 void MainWindow::b1()
@@ -190,6 +296,7 @@ void MainWindow::on_insertCard_clicked()
                                                 tr((*(new QString("Greetings: ")) + database.currentUser.getName()).toUtf8().data()));
     //             ui->mainWindow->setText("Hello: " + database.getCurrentUser().getName()+"\n"+"Current card: "+ database.getCurrentCard().getNumber());
                  ui->firstWindow->setText("Enter PIN:\n");
+                  ui->settingsBtn->setDisabled(true);
                  ui->empty->close();
                  ui->firstWindow->show();
                  ui->pins->setText("3");
@@ -632,7 +739,7 @@ void MainWindow::on_cancel_clicked()
 
 void MainWindow::on_insertCash_clicked()
 {
-    wdg->show();
+    cashWidget->show();
 }
 
 void MainWindow::setButtonOff()
@@ -667,6 +774,33 @@ void MainWindow::setButtonOn()
     ui->cancel->setDisabled(false);
 }
 
+void MainWindow::turnOff()
+{
+    ui->insertCard->setDisabled(true);
+    ui->screen1->setDisabled(true);
+    ui->screen2->setDisabled(true);
+    ui->screen3->setDisabled(true);
+    ui->screen4->setDisabled(true);
+    ui->screen5->setDisabled(true);
+    ui->screen6->setDisabled(true);
+    ui->screen7->setDisabled(true);
+    ui->screen8->setDisabled(true);
+
+}
+
+void MainWindow::turnOn()
+{
+    ui->insertCard->setDisabled(false);
+    ui->screen1->setDisabled(false);
+    ui->screen2->setDisabled(false);
+    ui->screen3->setDisabled(false);
+    ui->screen4->setDisabled(false);
+    ui->screen5->setDisabled(false);
+    ui->screen6->setDisabled(false);
+    ui->screen7->setDisabled(false);
+    ui->screen8->setDisabled(false);
+}
+
 
 
 void MainWindow::setDefault()
@@ -675,7 +809,7 @@ void MainWindow::setDefault()
     ui->mainWindow->close();
     ui->pin->close();
     ui->cash->close();
-
+    ui->settingsBtn->setDisabled(false);
     ui->other->close();
     ui->cards->close();
     ui->addCash->close();
@@ -739,3 +873,9 @@ void MainWindow::giveCash(const int a)
 }
 
 
+
+void MainWindow::on_settingsBtn_clicked()
+{
+    settingsWidget->show();
+    this->close();
+}

@@ -15,14 +15,23 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    QWidget *wdg = new QWidget;
+    QWidget *cashWidget = new QWidget;
+    QWidget *settingsWidget = new QWidget;
     Db database;
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 
 private slots:
+    void s1();
 
+    void s2();
+
+    void s3();
+
+    void s4();
+
+    void s5();
 
     void b1();
 
@@ -84,13 +93,24 @@ private slots:
 
     void on_insertCash_clicked();
 
+    void on_settingsBtn_clicked();
+
 private:
+    int limitCashUser = 5000;
+
+    int limitCash = 1000;
+
+    int limitCashInsert = 500;
+
+    bool working = true;
 
     void setButtonOff();
 
     void setButtonOn();
 
+    void turnOff();
 
+    void turnOn();
 
     void setDefault();
 

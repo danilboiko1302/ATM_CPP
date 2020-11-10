@@ -408,7 +408,7 @@ p, li { white-space: pre-wrap; }
      <set>Qt::NoTextInteraction</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="settingsBtn">
     <property name="geometry">
      <rect>
       <x>540</x>
