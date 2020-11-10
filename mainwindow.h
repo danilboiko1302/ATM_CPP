@@ -25,7 +25,7 @@ public:
 private slots:
     void s1();
 
-    void s2();
+
 
     void s3();
 
@@ -96,7 +96,6 @@ private slots:
     void on_settingsBtn_clicked();
 
 private:
-    int limitCashUser = 5000;
 
     int limitCash = 1000;
 

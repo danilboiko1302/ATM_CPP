@@ -34,12 +34,13 @@ MainWindow::MainWindow(QWidget *parent)
                       "4 500\n\n"
                       "5 1000\n\n"
                       "6 another amount\n\n"
-                      "8 Exit"
+                      "8 Return"
                       );
     ui->other->setText("1 Phone number replenishment\n\n"
                        "2 Charity\n\n"
                        "3 Extract\n\n"
-                       "8 Other");
+                       "4 Exit\n\n"
+                       "8 Return");
 
 
 
@@ -88,11 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
         cashWidget->setLayout(layout);
         QGridLayout *layoutSet = new QGridLayout();
         QPushButton *s1 = new QPushButton("Turn Off");
-        QString temp ("");
-        temp += "Limit for user ";
-        temp += QString::number(limitCashUser);
-        QPushButton *s2 = new QPushButton(temp);
-        temp = "";
+        QString temp = "";
         temp += "Limit for cash ";
         temp += QString::number(limitCash);
         QPushButton *s3 = new QPushButton(temp);
@@ -102,12 +99,10 @@ MainWindow::MainWindow(QWidget *parent)
         QPushButton *s4 = new QPushButton(temp);
         QPushButton *s5 = new QPushButton("Exit");
         layoutSet->addWidget(s1);
-        layoutSet->addWidget(s2);
         layoutSet->addWidget(s3);
         layoutSet->addWidget(s4);
         layoutSet->addWidget(s5);
         connect(s1, SIGNAL (clicked()), this, SLOT (s1()));
-        connect(s2, SIGNAL (clicked()), this, SLOT (s2()));
         connect(s3, SIGNAL (clicked()), this, SLOT (s3()));
         connect(s4, SIGNAL (clicked()), this, SLOT (s4()));
         connect(s5, SIGNAL (clicked()), this, SLOT (s5()));
@@ -136,26 +131,7 @@ void MainWindow::s1()
     }
 
 }
-void MainWindow::s2()
-{
-    int res = 0;
-    do{
-         res = QInputDialog::getInt(this, tr("New limit"),
-                                                tr("Limit: "), QLineEdit::Normal);
 
-
-    } while (res<0);
-    if (res != 0){
-        limitCashUser = res;
-        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(2));
-        QString temp ("");
-        temp += "Limit for user ";
-        temp += QString::number(limitCashUser);
-        q->setText(temp);
-        QMessageBox::information(this, tr("Limit"),
-                                       tr(temp.toUtf8().data()));
-    }
-}
 void MainWindow::s3()
 {
     int res = 0;
@@ -167,7 +143,7 @@ void MainWindow::s3()
     } while (res<0);
     if (res != 0){
         limitCash = res;
-        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(3));
+        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(2));
         QString temp = "";
         temp += "Limit for cash ";
         temp += QString::number(limitCash);
@@ -187,7 +163,7 @@ void MainWindow::s4()
     } while (res<0);
     if (res != 0){
         limitCashInsert = res;
-        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(4));
+        QPushButton *q = qobject_cast<QPushButton*>(settingsWidget->children().at(3));
         QString temp = "";
         temp += "Limit for cash insert ";
         temp += QString::number(limitCashInsert);
@@ -328,7 +304,7 @@ void MainWindow::on_screen1_clicked()
             ui->cards->setText(ui->cards->toPlainText() + QString::number(i+1) + " " + database.currentUser.getCards()[i].getNumber()+"\n");
             qDebug() << database.currentUser.getCards().sizes();
         }
-        ui->cards->setText(ui->cards->toPlainText() + "8 Exit");
+        ui->cards->setText(ui->cards->toPlainText() + "8 Return");
 
 
     } else if(!ui->cards->isHidden()){
@@ -456,6 +432,9 @@ void MainWindow::on_screen4_clicked()
 
         } else if(!ui->cash->isHidden()){
           giveCash(500);
+    } else if(!ui->other->isHidden()){
+        setDefault();
+
     }
 }
 
@@ -849,8 +828,13 @@ void MainWindow::checkBlockCard(const size_t a)
 }
 
 void MainWindow::giveCash(const int a)
-{
-    if (database.currentCard.getBalance() < a){
+{   if(a < 0 && (-a) > limitCashInsert){
+        QMessageBox::warning(this, tr("Error"),
+                                       tr("Limit is exceeded"));
+    }else if(a > limitCash){
+        QMessageBox::warning(this, tr("Error"),
+                                       tr("Limit is exceeded"));
+    } else if (database.currentCard.getBalance() < a){
         QMessageBox::warning(this, tr("Error"),
                                        tr("Not enough money"));
     } else {
