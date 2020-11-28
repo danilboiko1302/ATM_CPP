@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 //        ui->empty->close();
 //    }
     setWindowTitle("ATM");
+    this->setFixedSize(this->width(), this->height());
     ui->mainWindow->setText("1 Change card\n\n"
                       "2 Check balance\n\n"
                       "3 Get cash\n\n"
@@ -26,6 +27,14 @@ MainWindow::MainWindow(QWidget *parent)
                       "6 Block card\n\n"
                       "7 Change PIN \n\n"
                       "8 Other");
+    ui->mainWindow->setText("1 Check balance\n\n"
+                      "2 Get cash\n\n"
+                      "3 Card replenishment\n\n"
+                      "4 Card transfer\n\n"
+                      "5 Block card\n\n"
+                      "6 Change PIN \n\n"
+                      "7 Other\n\n"
+                       "8 Exit");
 
 
     ui->cash->setText("1 50\n\n"
@@ -39,7 +48,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->other->setText("1 Phone number replenishment\n\n"
                        "2 Charity\n\n"
                        "3 Extract\n\n"
-                       "4 Exit\n\n"
                        "8 Return");
 
 
@@ -261,19 +269,10 @@ void MainWindow::on_screen1_clicked()
 {
 
     if(!ui->mainWindow->isHidden()){
-        ui->cards->setText("");
-
-        ui->mainWindow->close();
-        ui->cards->show();
-        qDebug() << database.currentUser.getCards().sizes();
-        for(size_t i = 0; i < database.currentUser.getCards().sizes(); ++i){
-
-            ui->cards->setText(ui->cards->toPlainText() + QString::number(i+1) + " " + database.currentUser.getCards()[i].getNumber()+"\n");
-            qDebug() << database.currentUser.getCards().sizes();
-        }
-        ui->cards->setText(ui->cards->toPlainText() + "8 Return");
-
-
+        QString temp ("Balance for current card is ");
+        temp += QString::number(database.currentCard.getBalance());
+        QMessageBox::information(this, tr("Balance"),
+                                       tr(temp.toUtf8().data()));
     } else if(!ui->cards->isHidden()){
          checkBlockCard(0);
 
@@ -320,10 +319,8 @@ void MainWindow::on_screen1_clicked()
 void MainWindow::on_screen2_clicked()
 {
     if(!ui->mainWindow->isHidden()){
-        QString temp ("Balance for current card is ");
-        temp += QString::number(database.currentCard.getBalance());
-        QMessageBox::information(this, tr("Balance"),
-                                       tr(temp.toUtf8().data()));
+        ui->mainWindow->close();
+        ui->cash->show();
 
     } else if(!ui->cards->isHidden()){
 
@@ -357,7 +354,11 @@ void MainWindow::on_screen3_clicked()
 {
     if(!ui->mainWindow->isHidden()){
         ui->mainWindow->close();
-        ui->cash->show();
+        ui->addCash->show();
+
+        ui->insertCash->setDisabled(false);
+        ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
+
 
     } else if(!ui->cards->isHidden()){
             checkBlockCard(2);
@@ -387,26 +388,6 @@ void MainWindow::on_screen3_clicked()
 void MainWindow::on_screen4_clicked()
 {
 
-    if(!ui->mainWindow->isHidden()){
-        ui->mainWindow->close();
-        ui->addCash->show();
-
-        ui->insertCash->setDisabled(false);
-        ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
-
-    } else if(!ui->cards->isHidden()){
-             checkBlockCard(3);
-
-        } else if(!ui->cash->isHidden()){
-          giveCash(500);
-    } else if(!ui->other->isHidden()){
-        setDefault();
-
-    }
-}
-
-void MainWindow::on_screen5_clicked()
-{
     if(!ui->mainWindow->isHidden()){
         bool ok;
         QString card;
@@ -440,13 +421,14 @@ void MainWindow::on_screen5_clicked()
         database.sendMoney(database.currentCard.getNumber(), card, amount);
 
     } else if(!ui->cards->isHidden()){
-             checkBlockCard(4);
+             checkBlockCard(3);
 
         } else if(!ui->cash->isHidden()){
-        giveCash(1000);
+          giveCash(500);
     }
 }
-void MainWindow::on_screen6_clicked()
+
+void MainWindow::on_screen5_clicked()
 {
     if(!ui->mainWindow->isHidden()){
         QMessageBox msgBox;
@@ -474,34 +456,13 @@ void MainWindow::on_screen6_clicked()
         }
 
     } else if(!ui->cards->isHidden()){
-            checkBlockCard(5);
+             checkBlockCard(4);
 
         } else if(!ui->cash->isHidden()){
-        bool ok;
-        int res;
-        do{
-            ok = true;
-             res = QInputDialog::getInt(this, tr("Choose amount multiple of 50"),
-                                                    tr(""), QLineEdit::Normal);
-             if (res < 0 ){
-                 QMessageBox::warning(this, tr("Error"),
-                                                tr("Amount must be more than 0"));
-                  ok = false;
-             } else if(res % 50 != 0){
-                ok = false;
-                QMessageBox::warning(this, tr("Error"),
-                                               tr("Amount must be multiple of 50"));
-            }
-             qDebug() << res;
-        } while(res < 0 || !ok);
-        if(res != 0){
-            giveCash(res);
-        }
-
+        giveCash(1000);
     }
 }
-
-void MainWindow::on_screen7_clicked()
+void MainWindow::on_screen6_clicked()
 {
     if(!ui->mainWindow->isHidden()){
         bool ok;
@@ -552,13 +513,48 @@ void MainWindow::on_screen7_clicked()
 
         } while (text.length() < 4 || res <= 0);
 
+    } else if(!ui->cards->isHidden()){
+            checkBlockCard(5);
+
+        } else if(!ui->cash->isHidden()){
+        bool ok;
+        int res;
+        do{
+            ok = true;
+             res = QInputDialog::getInt(this, tr("Choose amount multiple of 50"),
+                                                    tr(""), QLineEdit::Normal);
+             if (res < 0 ){
+                 QMessageBox::warning(this, tr("Error"),
+                                                tr("Amount must be more than 0"));
+                  ok = false;
+             } else if(res % 50 != 0){
+                ok = false;
+                QMessageBox::warning(this, tr("Error"),
+                                               tr("Amount must be multiple of 50"));
+            }
+             qDebug() << res;
+        } while(res < 0 || !ok);
+        if(res != 0){
+            giveCash(res);
+        }
+
+    }
+}
+
+void MainWindow::on_screen7_clicked()
+{
+    if(!ui->mainWindow->isHidden()){
+
+        ui->mainWindow->close();
+        ui->other->show();
     }
 }
 void MainWindow::on_screen8_clicked()
 {
     if(!ui->mainWindow->isHidden()){
-        ui->mainWindow->close();
-        ui->other->show();
+
+                setDefault();
+
 
     } else if(!ui->cards->isHidden()){
         ui->mainWindow->show();
@@ -828,5 +824,5 @@ void MainWindow::giveCash(const int a)
 void MainWindow::on_settingsBtn_clicked()
 {
     settingsWidget->show();
-    this->close();
+
 }
