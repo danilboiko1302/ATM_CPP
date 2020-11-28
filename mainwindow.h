@@ -23,6 +23,9 @@ public:
 
 
 private slots:
+
+     void changeSumCash(const int);
+
     void s1();
 
 
@@ -33,25 +36,7 @@ private slots:
 
     void s5();
 
-    void b1();
 
-    void b2();
-
-    void b3();
-
-    void b4();
-
-    void b5();
-
-    void b6();
-
-    void b7();
-
-    void b8();
-
-    void b9();
-
-    void b10();
 
     void on_insertCard_clicked();
 
@@ -117,7 +102,7 @@ private:
 
     void giveCash(const int);
 
-    void changeSumCash(const int);
+
 
     Ui::MainWindow *ui;
 };

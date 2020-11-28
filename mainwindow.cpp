@@ -66,16 +66,28 @@ MainWindow::MainWindow(QWidget *parent)
         b8->setText("200");
         b9->setText("500");
         b10->setText("1000");
-        connect(b1, SIGNAL (clicked()), this, SLOT (b1()));
-        connect(b2, SIGNAL (clicked()), this, SLOT (b2()));
-        connect(b3, SIGNAL (clicked()), this, SLOT (b3()));
-        connect(b4, SIGNAL (clicked()), this, SLOT (b4()));
-        connect(b5, SIGNAL (clicked()), this, SLOT (b5()));
-        connect(b6, SIGNAL (clicked()), this, SLOT (b6()));
-        connect(b7, SIGNAL (clicked()), this, SLOT (b7()));
-        connect(b8, SIGNAL (clicked()), this, SLOT (b8()));
-        connect(b9, SIGNAL (clicked()), this, SLOT (b9()));
-        connect(b10, SIGNAL (clicked()), this, SLOT (b10()));
+        QSignalMapper* signalMapper = new QSignalMapper (this) ;
+        connect(b1, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b2, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b3, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b4, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b5, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b6, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b7, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b8, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b9, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        connect(b10, SIGNAL (clicked()), signalMapper, SLOT (map()));
+        signalMapper -> setMapping (b1, 1);
+        signalMapper -> setMapping (b2, 2);
+        signalMapper -> setMapping (b3, 5) ;
+        signalMapper -> setMapping (b4, 10) ;
+        signalMapper -> setMapping (b5, 20) ;
+        signalMapper -> setMapping (b6, 50) ;
+        signalMapper -> setMapping (b7, 100) ;
+        signalMapper -> setMapping (b8, 200) ;
+        signalMapper -> setMapping (b9, 500) ;
+        signalMapper -> setMapping (b10, 1000) ;
+        connect (signalMapper, SIGNAL(mapped(int)), this, SLOT(changeSumCash(int))) ;
         layout->addWidget(b1);
         layout->addWidget(b2);
         layout->addWidget(b3);
@@ -185,51 +197,6 @@ void MainWindow::changeSumCash(const int a)
     ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
     cashWidget->close();
 }
-
-void MainWindow::b1()
-{
-
-    changeSumCash(1);
-}
-
-void MainWindow::b2()
-{
-     changeSumCash(2);
-}
-void MainWindow::b3()
-{
-   changeSumCash(5);
-}
-void MainWindow::b4()
-{
-     changeSumCash(10);
-}
-void MainWindow::b5()
-{
-     changeSumCash(20);
-}
-void MainWindow::b6()
-{
-     changeSumCash(50);
-}
-void MainWindow::b7()
-{
-     changeSumCash(100);
-}
-void MainWindow::b8()
-{
-    changeSumCash(200);
-}
-void MainWindow::b9()
-{
-     changeSumCash(500);
-}
-void MainWindow::b10()
-{
-
-     changeSumCash(1000);
-}
-
 
 void MainWindow::on_insertCard_clicked()
 {
