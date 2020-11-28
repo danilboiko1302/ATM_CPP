@@ -86,6 +86,8 @@ private:
 
     int limitCashInsert = 500;
 
+    bool authorized = false;
+
     bool working = true;
 
     void setButtonOff();

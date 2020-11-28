@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent)
                       "5 Block card\n\n"
                       "6 Change PIN \n\n"
                       "7 Other\n\n"
-                       "8 Exit");
+                      "8 Exit");
 
 
     ui->cash->setText("1 50\n\n"
@@ -247,12 +247,14 @@ void MainWindow::on_insertCard_clicked()
                                                 tr((*(new QString("Greetings: ")) + database.currentUser.getName()).toUtf8().data()));
     //             ui->mainWindow->setText("Hello: " + database.getCurrentUser().getName()+"\n"+"Current card: "+ database.getCurrentCard().getNumber());
                  ui->firstWindow->setText("Enter PIN:\n");
+                 ui->pin->setText("");
                   ui->settingsBtn->setDisabled(true);
                  ui->empty->close();
                  ui->firstWindow->show();
                  ui->pins->setText("3");
                   ui->insertCard->setDisabled(true);
                     setButtonOn();
+
                  break;
              }
 
@@ -499,7 +501,7 @@ void MainWindow::on_screen6_clicked()
                         database.changePin(database.currentCard.getNumber(), QString::number(res));
                            QMessageBox::information(this, tr("Pin"),
                                                           tr("Pin in changed"));
-                           setDefault();
+
                           break;
                       case QMessageBox::Cancel:
                           break;
@@ -576,8 +578,9 @@ void MainWindow::on_screen8_clicked()
 
 void MainWindow::on_b1_clicked()
 {
+
      ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
- ui->pin->setText(ui->pin->toPlainText() + "1");
+     ui->pin->setText(ui->pin->toPlainText() + "1");
 }
 
 void MainWindow::on_b2_clicked()
@@ -633,6 +636,7 @@ void MainWindow::on_ok_clicked()
          ui->mainWindow->show();
 
          ui->empty->close();
+          authorized = true;
      } else{
          QMessageBox::warning(this, tr("Error"),
                                         tr("Wrong PIN"));
@@ -773,6 +777,7 @@ void MainWindow::setDefault()
     ui->ok->setDisabled(true);
     ui->reset->setDisabled(true);
     ui->cancel->setDisabled(true);
+    authorized = false;
 }
 
 void MainWindow::checkBlockCard(const size_t a)
