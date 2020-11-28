@@ -80,13 +80,22 @@ private slots:
 
     void on_settingsBtn_clicked();
 
+    void on_b0_clicked();
+
 private:
+    enum States
+    {
+        changePIN, // присваивается 0
+        authorized,
+        unauthorized, // присваивается 1
+        blockCard, // присваивается 2
+    };
+
+    States currentState = unauthorized;
 
     int limitCash = 1000;
 
     int limitCashInsert = 500;
-
-    bool authorized = false;
 
     bool working = true;
 

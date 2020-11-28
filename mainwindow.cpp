@@ -208,6 +208,7 @@ void MainWindow::changeSumCash(const int a)
 
 void MainWindow::on_insertCard_clicked()
 {
+
     bool ok;
     QString text;
     do{
@@ -405,8 +406,14 @@ void MainWindow::on_screen4_clicked()
                 QMessageBox::warning(this, tr("Error"),
                                      tr("Wrong input card"));
             }
+            if(database.currentCard.getNumber() == card){
+                QMessageBox::warning(this, tr("Error"),
+                                     tr("You can not send money to the same card"));
 
-        } while (card.length() != 16 || card.toULongLong() == 0);
+
+            }
+
+        } while (card.length() != 16 || card.toULongLong() == 0 || database.currentCard.getNumber() == card);
         do{
             amount = QInputDialog::getInt(this, tr("Input Amount"),
                                           tr("Amount: "), QLineEdit::Normal
@@ -433,29 +440,14 @@ void MainWindow::on_screen4_clicked()
 void MainWindow::on_screen5_clicked()
 {
     if(!ui->mainWindow->isHidden()){
-        QMessageBox msgBox;
-        QString temp ("You want to block your current card ");
-        temp += database.currentCard.getNumber();
-        msgBox.setText(temp);
-        msgBox.setInformativeText("Are you sure?");
-        msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-        msgBox.setDefaultButton(QMessageBox::Cancel);
-        int ret = msgBox.exec();
-        switch (ret) {
-        case QMessageBox::Ok:
-            // Save was clicked
-            database.blockCard(database.currentCard.getNumber());
-            QMessageBox::warning(this, tr("Error"),
-                                 tr("Your Card is Blocked now"));
-            setDefault();
+        currentState = blockCard;
+        ui->mainWindow->hide();
+        setButtonOn();
 
-            break;
-        case QMessageBox::Cancel:
-            break;
-        default:
-            // should never be reached
-            break;
-        }
+        ui->firstWindow->setText("Enter PIN:");
+         ui->pin->setText("");
+        ui->firstWindow->show();
+
 
     } else if(!ui->cards->isHidden()){
         checkBlockCard(4);
@@ -469,6 +461,7 @@ void MainWindow::on_screen6_clicked()
     if(!ui->mainWindow->isHidden()){
         ui->mainWindow->hide();
         setButtonOn();
+        currentState = changePIN;
         ui->firstWindow->setText("Enter old PIN:");
          ui->pin->setText("");
         ui->firstWindow->show();
@@ -530,7 +523,11 @@ void MainWindow::on_screen8_clicked()
     }
 }
 
-
+void MainWindow::on_b0_clicked()
+{
+    ui->firstWindow->setText(ui->firstWindow->toPlainText()+"*");
+    ui->pin->setText(ui->pin->toPlainText() + "0");
+}
 
 
 void MainWindow::on_b1_clicked()
@@ -584,7 +581,80 @@ void MainWindow::on_b9_clicked()
 
 void MainWindow::on_ok_clicked()
 {
-    if(authorized){
+    switch (currentState) {
+    case unauthorized:
+        if(!ui->firstWindow->isHidden()) {
+            if( ui->pin->toPlainText() == database.currentCard.getPin()){
+                QMessageBox::information(this, tr("Welcome"),
+                                         tr("PIN is correct"));
+                setButtonOff();
+
+                ui->firstWindow->close();
+                ui->mainWindow->show();
+
+                ui->empty->close();
+               currentState = authorized;
+            } else{
+                QMessageBox::warning(this, tr("Error"),
+                                     tr("Wrong PIN"));
+                if(ui->pins->text() == "3"){
+                    ui->pins->setText("2");
+                } else  if(ui->pins->text() == "2"){
+                    ui->pins->setText("1");
+                } else  {
+                    QMessageBox::warning(this, tr("Error"),
+                                         tr("Your Card is Blocked now"));
+                    database.blockCard(database.currentCard.getNumber());
+
+                    ui->pin->setText("");
+                    ui->firstWindow->close();
+                    ui->mainWindow->close();
+                    ui->insertCard->setDisabled(true);
+                    ui->empty->show();
+
+                }
+            }
+            ui->pin->setText("");
+            ui->firstWindow->setText("Enter PIN:\n");
+        }
+        break;
+     case blockCard:
+        if( ui->pin->toPlainText() == database.currentCard.getPin()){
+            {
+                QMessageBox msgBox;
+                QString temp ("You want to block your current card ");
+                temp += database.currentCard.getNumber();
+                msgBox.setText(temp);
+                msgBox.setInformativeText("Are you sure?");
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setDefaultButton(QMessageBox::Cancel);
+                int ret = msgBox.exec();
+                switch (ret) {
+                case QMessageBox::Ok:
+                    // Save was clicked
+                    database.blockCard(database.currentCard.getNumber());
+                    QMessageBox::warning(this, tr("Error"),
+                                         tr("Your Card is Blocked now"));
+                    setDefault();
+
+                    break;
+                case QMessageBox::Cancel:
+                    on_cancel_clicked();
+                    break;
+                default:
+                    // should never be reached
+                    break;
+                }
+            }
+        } else {
+            ui->firstWindow->setText("Enter PIN:");
+             ui->pin->setText("");
+            QMessageBox::warning(this, tr("Error"),
+                                 tr("Wrong PIN"));
+
+        }
+        break;
+     case changePIN:
         QStringList level = ui->pin->toPlainText().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
         switch (level.size()) {
         case 1:
@@ -634,6 +704,7 @@ void MainWindow::on_ok_clicked()
                    database.changePin(database.currentCard.getNumber(), level.at(2));
                       QMessageBox::information(this, tr("Pin"),
                                                      tr("Pin in changed"));
+                      currentState = authorized;
 
                      break;
                  case QMessageBox::Cancel:
@@ -654,69 +725,35 @@ void MainWindow::on_ok_clicked()
             break;
         }
 
-    } else {
-        if(!ui->firstWindow->isHidden()) {
-            if( ui->pin->toPlainText() == database.currentCard.getPin()){
-                QMessageBox::information(this, tr("Welcome"),
-                                         tr("PIN is correct"));
-                setButtonOff();
-
-                ui->firstWindow->close();
-                ui->mainWindow->show();
-
-                ui->empty->close();
-                authorized = true;
-            } else{
-                QMessageBox::warning(this, tr("Error"),
-                                     tr("Wrong PIN"));
-                if(ui->pins->text() == "3"){
-                    ui->pins->setText("2");
-                } else  if(ui->pins->text() == "2"){
-                    ui->pins->setText("1");
-                } else  {
-                    QMessageBox::warning(this, tr("Error"),
-                                         tr("Your Card is Blocked now"));
-                    database.blockCard(database.currentCard.getNumber());
-
-                    ui->pin->setText("");
-                    ui->firstWindow->close();
-                    ui->mainWindow->close();
-                    ui->insertCard->setDisabled(true);
-                    ui->empty->show();
-
-                }
-            }
-            ui->pin->setText("");
-            ui->firstWindow->setText("Enter PIN:\n");
-        }
+        break;
     }
+
 
 }
 void MainWindow::on_reset_clicked()
 {
-    if(authorized){
-
-            ui->firstWindow->setText("Enter old PIN:");
-             ui->pin->setText("");
-
-
-    } else {
+    switch (currentState) {
+    case unauthorized:
         if(!ui->firstWindow->isHidden()) {
             ui->pin->setText("");
             ui->firstWindow->setText("Enter PIN:\n");
         }
+        break;
+     case changePIN:
+        ui->firstWindow->setText("Enter old PIN:");
+         ui->pin->setText("");
+        break;
+     case blockCard:
+        ui->firstWindow->setText("Enter PIN:");
+         ui->pin->setText("");
+        break;
     }
 }
 
 void MainWindow::on_cancel_clicked()
 {
-    if(authorized){
-        ui->pin->setText("");
-        ui->firstWindow->setText("Enter PIN:\n");
-        ui->firstWindow->hide();
-        setButtonOff();
-        ui->mainWindow->show();
-    } else {
+    switch (currentState) {
+    case unauthorized:
         if(!ui->firstWindow->isHidden()) {
             ui->pin->setText("");
             ui->firstWindow->close();
@@ -725,7 +762,25 @@ void MainWindow::on_cancel_clicked()
             setButtonOff();
             ui->empty->show();
         }
+        break;
+     case changePIN:
+        ui->pin->setText("");
+        ui->firstWindow->setText("Enter PIN:\n");
+        ui->firstWindow->hide();
+        setButtonOff();
+        ui->mainWindow->show();
+        currentState = authorized;
+        break;
+    case blockCard:
+       ui->pin->setText("");
+       ui->firstWindow->setText("Enter PIN:\n");
+       ui->firstWindow->hide();
+       setButtonOff();
+       ui->mainWindow->show();
+       currentState = authorized;
+       break;
     }
+
 }
 
 
@@ -737,6 +792,7 @@ void MainWindow::on_insertCash_clicked()
 
 void MainWindow::setButtonOff()
 {
+    ui->b0->setDisabled(true);
     ui->b1->setDisabled(true);
     ui->b2->setDisabled(true);
     ui->b3->setDisabled(true);
@@ -753,6 +809,7 @@ void MainWindow::setButtonOff()
 
 void MainWindow::setButtonOn()
 {
+    ui->b0->setDisabled(false);
     ui->b1->setDisabled(false);
     ui->b2->setDisabled(false);
     ui->b3->setDisabled(false);
@@ -812,6 +869,7 @@ void MainWindow::setDefault()
     ui->sum->close();
     ui->empty->show();
     ui->insertCard->setDisabled(false);
+    ui->b0->setDisabled(true);
     ui->b1->setDisabled(true);
     ui->b2->setDisabled(true);
     ui->b3->setDisabled(true);
@@ -824,7 +882,7 @@ void MainWindow::setDefault()
     ui->ok->setDisabled(true);
     ui->reset->setDisabled(true);
     ui->cancel->setDisabled(true);
-    authorized = false;
+    currentState = unauthorized;
 }
 
 void MainWindow::checkBlockCard(const size_t a)
@@ -878,4 +936,6 @@ void MainWindow::on_settingsBtn_clicked()
     settingsWidget->show();
 
 }
+
+
 
