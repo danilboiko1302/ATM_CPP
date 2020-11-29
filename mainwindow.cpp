@@ -194,7 +194,7 @@ void MainWindow::s5()
 void MainWindow::changeSumCash(const int a)
 {
     ui->sum->setText(QString::number(ui->sum->text().toInt() + a));
-    ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
+    ui->addCash->setText("*Please use button \"Insert Cash\"*\nCurrent amount: " + ui->sum->text() + "\n1 Confirm");
     cashWidget->close();
 }
 
@@ -401,7 +401,7 @@ void MainWindow::on_screen3_clicked()
         ui->addCash->show();
 
         ui->insertCash->setDisabled(false);
-        ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm\n2 Exit");
+        ui->addCash->setText("*Please use button \"Insert Cash\"*\nCurrent amount: " + ui->sum->text() + "\n1 Confirm\n2 Exit");
 
 
     } else if(!ui->cards->isHidden()){
