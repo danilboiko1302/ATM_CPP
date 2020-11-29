@@ -19,14 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
     //    }
     setWindowTitle("ATM");
     this->setFixedSize(this->width(), this->height());
-    ui->mainWindow->setText("1 Change card\n\n"
-                            "2 Check balance\n\n"
-                            "3 Get cash\n\n"
-                            "4 Card replenishment\n\n"
-                            "5 Card transfer\n\n"
-                            "6 Block card\n\n"
-                            "7 Change PIN \n\n"
-                            "8 Other");
     ui->mainWindow->setText("1 Check balance\n\n"
                             "2 Get cash\n\n"
                             "3 Card replenishment\n\n"
@@ -157,7 +149,7 @@ void MainWindow::s3()
     int res = 0;
     do{
         res = QInputDialog::getInt(this, tr("New limit"),
-                                   tr("Limit: "), QLineEdit::Normal);
+                                   tr("Limit: "), 0, QLineEdit::Normal);
 
 
     } while (res<0);
@@ -168,8 +160,8 @@ void MainWindow::s3()
         temp += "Limit for cash ";
         temp += QString::number(limitCash);
         q->setText(temp);
-        QMessageBox::information(this, tr("Limit"),
-                                 tr(temp.toUtf8().data()));
+        QMessageBox::about(this, tr("Limit"),
+                           tr(temp.toUtf8().data()));
     }
 }
 void MainWindow::s4()
@@ -177,7 +169,7 @@ void MainWindow::s4()
     int res = 0;
     do{
         res = QInputDialog::getInt(this, tr("New limit"),
-                                   tr("Limit: "), QLineEdit::Normal);
+                                   tr("Limit: "), 0, QLineEdit::Normal);
 
 
     } while (res<0);
@@ -188,8 +180,8 @@ void MainWindow::s4()
         temp += "Limit for cash insert ";
         temp += QString::number(limitCashInsert);
         q->setText(temp);
-        QMessageBox::information(this, tr("Limit"),
-                                 tr(temp.toUtf8().data()));
+        QMessageBox::about(this, tr("Limit"),
+                           tr(temp.toUtf8().data()));
     }
 }
 
@@ -208,20 +200,36 @@ void MainWindow::changeSumCash(const int a)
 
 void MainWindow::on_insertCard_clicked()
 {
-
-    bool ok;
     QString text;
-    QLineEdit *edit = new QLineEdit(this);
-     edit->setInputMask("9");
-
-
     do{
-        text = QInputDialog::getText(this, tr("Insert Card"),
-                                     tr("Card: "), edit->Normal,
-                                     "", &ok);
-        if(!ok) return;
-        qDebug() << text.length();
-        if(text.length() != 16 || text.toULongLong() == 0){
+        QInputDialog inp;
+        inp.setWindowTitle("Insert Card");
+        inp.setLabelText("Card");
+        inp.setTextValue("");
+        connect(&inp, &QInputDialog::textValueChanged, this, [&inp](const QString text) {
+
+            QString res("");
+            for (int i = 0; i<text.length(); i++){
+                if( text[i].isDigit()){
+                    res +=  text[i];
+                }
+
+            }
+            if(res.length()>16){
+                res = res.left(16);
+            }
+
+            inp.setTextValue(res);
+
+        });
+
+        int ret = inp.exec();
+
+        if (ret == QDialog::DialogCode::Accepted )
+            text = inp.textValue();
+        if (ret == QDialog::DialogCode::Rejected )
+            return;
+        if(text.length() != 16){
             QMessageBox::warning(this, tr("Error"),
                                  tr("Wrong input card"));
         }else
@@ -248,8 +256,11 @@ void MainWindow::on_insertCard_clicked()
                     QMessageBox::warning(this, tr("Error"),
                                          tr("This card is blocked"));
                 } else {
-                    QMessageBox::information(this, tr("Greetings"),
-                                             tr((*(new QString("Greetings: ")) + database.currentUser.getName()).toUtf8().data()));
+                    //                    QMessageBox::information(this, tr("Greetings"),
+                    //                                             tr((*(new QString("Greetings: ")) + database.currentUser.getName()).toUtf8().data()));
+                    QMessageBox::about(this, tr("Greetings"),
+                                       tr((*(new QString("Greetings: ")) + database.currentUser.getName()).toUtf8().data()));
+
                     //             ui->mainWindow->setText("Hello: " + database.getCurrentUser().getName()+"\n"+"Current card: "+ database.getCurrentCard().getNumber());
                     ui->firstWindow->setText("Enter PIN:\n");
                     ui->pin->setText("");
@@ -278,8 +289,8 @@ void MainWindow::on_screen1_clicked()
     if(!ui->mainWindow->isHidden()){
         QString temp ("Balance for current card is ");
         temp += QString::number(database.currentCard.getBalance());
-        QMessageBox::information(this, tr("Balance"),
-                                 tr(temp.toUtf8().data()));
+        QMessageBox::about(this, tr("Balance"),
+                           tr(temp.toUtf8().data()));
     } else if(!ui->cards->isHidden()){
         checkBlockCard(0);
 
@@ -292,36 +303,53 @@ void MainWindow::on_screen1_clicked()
         ui->sum->setText("0");
         ui->insertCash->setDisabled(true);
     } else if(!ui->other->isHidden()){
-        bool ok;
         int res;
         QString text;
         QRegExp rx("(\\+38)?0([0-9]{2}|\\([0-9]{2}\\))[0-9]{7}");
         do{
-            text = QInputDialog::getText(this, tr("Insert phone number"),
-                                         tr("Phone number: "), QLineEdit::Normal,
-                                         "", &ok);
-            if(!ok) return;
+            QInputDialog inp;
+            inp.setWindowTitle("Phone number");
+            inp.setLabelText("Phone number");
+            inp.setTextValue("");
+            connect(&inp, &QInputDialog::textValueChanged, this, [&inp](const QString text) {
+                QString res("");
+                for (int i = 0; i<text.length(); i++){
+                    if( text[i].isDigit()){
+                        res +=  text[i];
+                    }
 
+                }
+                if(res.length()>16){
+                    res = res.left(16);
+                }
+
+                inp.setTextValue(res);
+
+            });
+            int ret = inp.exec();
+            if (ret == QDialog::DialogCode::Accepted )
+                text = inp.textValue();
+            if (ret == QDialog::DialogCode::Rejected )
+                return;
+            if(!rx.exactMatch(text)){
+                QMessageBox::warning(this, tr("Phone number replenished"),
+                                   tr("Wrong phone"));
+            }
         } while (!rx.exactMatch(text));
         do{
             res = QInputDialog::getInt(this, tr("Choose amount"),
-                                       tr("Amount: "), QLineEdit::Normal);
-
-
+                                       tr("Amount: "),   0,QLineEdit::Normal);
         } while (res<0);
         if(res != 0){
-
             QString temp ("Phone number ");
             temp += text;
             temp += " was replenished for ";
             temp += QString::number(res);
-            QMessageBox::information(this, tr("Phone number replenished"),
-                                     tr(temp.toUtf8().data()));
+            QMessageBox::about(this, tr("Phone number replenished"),
+                               tr(temp.toUtf8().data()));
             database.getCash(database.currentCard.getNumber(), res);
         }
-
     }
-
 }
 void MainWindow::on_screen2_clicked()
 {
@@ -339,7 +367,7 @@ void MainWindow::on_screen2_clicked()
         int res;
         do{
             res = QInputDialog::getInt(this, tr("Choose amount"),
-                                       tr("Amount: "), QLineEdit::Normal);
+                                       tr("Amount: "),   0,QLineEdit::Normal);
 
 
         } while (res<0);
@@ -349,12 +377,21 @@ void MainWindow::on_screen2_clicked()
             temp += QString::number(res);
             temp += ". Thank You!";
 
-            QMessageBox::information(this, tr("Charity"),
-                                     tr(temp.toUtf8().data()));
+            QMessageBox::about(this, tr("Charity"),
+                               tr(temp.toUtf8().data()));
             database.getCash(database.currentCard.getNumber(), res);
         }
 
+    }else if(!ui->addCash->isHidden()){
+        if (ui->sum->text() == "0"){
+            ui->addCash->close();
+            ui->mainWindow->show();
+            ui->sum->setText("0");
+            ui->insertCash->setDisabled(true);
+        }
+
     }
+
 }
 
 void MainWindow::on_screen3_clicked()
@@ -364,7 +401,7 @@ void MainWindow::on_screen3_clicked()
         ui->addCash->show();
 
         ui->insertCash->setDisabled(false);
-        ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm");
+        ui->addCash->setText("Current amount: " + ui->sum->text() + "\n1 Confirm\n2 Exit");
 
 
     } else if(!ui->cards->isHidden()){
@@ -382,11 +419,11 @@ void MainWindow::on_screen3_clicked()
             }
         }
         if(res == ""){
-            QMessageBox::information(this, tr("Extract"),
-                                     tr("Extract is empty"));
+            QMessageBox::about(this, tr("Extract"),
+                               tr("Extract is empty"));
         } else {
-            QMessageBox::information(this, tr("Extract"),
-                                     tr(res.toUtf8().data()));
+            QMessageBox::about(this, tr("Extract"),
+                               tr(res.toUtf8().data()));
         }
 
 
@@ -396,17 +433,40 @@ void MainWindow::on_screen4_clicked()
 {
 
     if(!ui->mainWindow->isHidden()){
-        bool ok;
+
+
         QString card;
         int amount;
         do{
-            card = QInputDialog::getText(this, tr("Input Card"),
-                                         tr("Card: "), QLineEdit::Normal,
-                                         "", &ok);
-            if(!ok) return;
-            qDebug() << card.length();
-            qDebug() << card.toULongLong();
-            if(card.length() != 16 || card.toULongLong() == 0){
+            QInputDialog inp;
+            inp.setWindowTitle("Insert Card");
+            inp.setLabelText("Card");
+            inp.setTextValue("");
+            connect(&inp, &QInputDialog::textValueChanged, this, [&inp](const QString text) {
+
+                QString res("");
+                for (int i = 0; i<text.length(); i++){
+                    if( text[i].isDigit()){
+                        res +=  text[i];
+                    }
+
+                }
+                if(res.length()>16){
+                    res = res.left(16);
+                }
+
+                inp.setTextValue(res);
+
+            });
+
+            int ret = inp.exec();
+
+            if (ret == QDialog::DialogCode::Accepted )
+                card = inp.textValue();
+            if (ret == QDialog::DialogCode::Rejected )
+                return;
+
+            if(card.length() != 16 ){
                 QMessageBox::warning(this, tr("Error"),
                                      tr("Wrong input card"));
             }
@@ -420,8 +480,8 @@ void MainWindow::on_screen4_clicked()
         } while (card.length() != 16 || card.toULongLong() == 0 || database.currentCard.getNumber() == card);
         do{
             amount = QInputDialog::getInt(this, tr("Input Amount"),
-                                          tr("Amount: "), QLineEdit::Normal
-                                          );
+                                          tr("Amount: "),   0,QLineEdit::Normal);
+
 
             if(amount == 0) return;
             if(amount < 0){
@@ -449,7 +509,7 @@ void MainWindow::on_screen5_clicked()
         setButtonOn();
 
         ui->firstWindow->setText("Enter PIN:");
-         ui->pin->setText("");
+        ui->pin->setText("");
         ui->firstWindow->show();
 
 
@@ -467,7 +527,7 @@ void MainWindow::on_screen6_clicked()
         setButtonOn();
         currentState = changePIN;
         ui->firstWindow->setText("Enter old PIN:");
-         ui->pin->setText("");
+        ui->pin->setText("");
         ui->firstWindow->show();
     } else if(!ui->cards->isHidden()){
         checkBlockCard(5);
@@ -478,7 +538,7 @@ void MainWindow::on_screen6_clicked()
         do{
             ok = true;
             res = QInputDialog::getInt(this, tr("Choose amount multiple of 50"),
-                                       tr(""), QLineEdit::Normal);
+                                       tr(""),   0,QLineEdit::Normal);
             if (res < 0 ){
                 QMessageBox::warning(this, tr("Error"),
                                      tr("Amount must be more than 0"));
@@ -589,15 +649,15 @@ void MainWindow::on_ok_clicked()
     case unauthorized:
         if(!ui->firstWindow->isHidden()) {
             if( ui->pin->toPlainText() == database.currentCard.getPin()){
-                QMessageBox::information(this, tr("Welcome"),
-                                         tr("PIN is correct"));
+                QMessageBox::about(this, tr("Welcome"),
+                                   tr("PIN is correct"));
                 setButtonOff();
 
                 ui->firstWindow->close();
                 ui->mainWindow->show();
 
                 ui->empty->close();
-               currentState = authorized;
+                currentState = authorized;
             } else{
                 QMessageBox::warning(this, tr("Error"),
                                      tr("Wrong PIN"));
@@ -622,7 +682,7 @@ void MainWindow::on_ok_clicked()
             ui->firstWindow->setText("Enter PIN:\n");
         }
         break;
-     case blockCard:
+    case blockCard:
         if( ui->pin->toPlainText() == database.currentCard.getPin()){
             {
                 QMessageBox msgBox;
@@ -652,13 +712,13 @@ void MainWindow::on_ok_clicked()
             }
         } else {
             ui->firstWindow->setText("Enter PIN:");
-             ui->pin->setText("");
+            ui->pin->setText("");
             QMessageBox::warning(this, tr("Error"),
                                  tr("Wrong PIN"));
 
         }
         break;
-     case changePIN:
+    case changePIN:
         QStringList level = ui->pin->toPlainText().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
         switch (level.size()) {
         case 1:
@@ -667,7 +727,7 @@ void MainWindow::on_ok_clicked()
                 ui->pin->setText(ui->pin->toPlainText() +"\n");
             } else {
                 ui->firstWindow->setText("Enter old PIN:");
-                 ui->pin->setText("");
+                ui->pin->setText("");
                 QMessageBox::warning(this, tr("Error"),
                                      tr("Wrong PIN"));
 
@@ -690,35 +750,35 @@ void MainWindow::on_ok_clicked()
             break;
         case 3:
             if( level.at(1) == level.at(2)){
-               QMessageBox msgBox;
-               QString temp ("You want to change pin on your current card ");
-               temp += database.currentCard.getNumber();
-               msgBox.setText(temp);
-               msgBox.setInformativeText("Are you sure?");
-               msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-               msgBox.setDefaultButton(QMessageBox::Cancel);
-               int ret = msgBox.exec();
-               switch (ret) {
-                 case QMessageBox::Ok:
-                   ui->pin->setText("");
-                   ui->firstWindow->setText("Enter PIN:\n");
-                   ui->firstWindow->hide();
-                   setButtonOff();
-                   ui->mainWindow->show();
-                   database.changePin(database.currentCard.getNumber(), level.at(2));
-                      QMessageBox::information(this, tr("Pin"),
-                                                     tr("Pin in changed"));
-                      currentState = authorized;
-
-                     break;
-                 case QMessageBox::Cancel:
-                   ui->firstWindow->setText("Enter old PIN:");
+                QMessageBox msgBox;
+                QString temp ("You want to change pin on your current card ");
+                temp += database.currentCard.getNumber();
+                msgBox.setText(temp);
+                msgBox.setInformativeText("Are you sure?");
+                msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+                msgBox.setDefaultButton(QMessageBox::Cancel);
+                int ret = msgBox.exec();
+                switch (ret) {
+                case QMessageBox::Ok:
                     ui->pin->setText("");
-                     break;
-                 default:
-                     // should never be reached
-                     break;
-               }
+                    ui->firstWindow->setText("Enter PIN:\n");
+                    ui->firstWindow->hide();
+                    setButtonOff();
+                    ui->mainWindow->show();
+                    database.changePin(database.currentCard.getNumber(), level.at(2));
+                    QMessageBox::about(this, tr("Pin"),
+                                       tr("Pin in changed"));
+                    currentState = authorized;
+
+                    break;
+                case QMessageBox::Cancel:
+                    ui->firstWindow->setText("Enter old PIN:");
+                    ui->pin->setText("");
+                    break;
+                default:
+                    // should never be reached
+                    break;
+                }
             } else {
                 on_reset_clicked();
                 QMessageBox::warning(this, tr("Error"),
@@ -743,13 +803,13 @@ void MainWindow::on_reset_clicked()
             ui->firstWindow->setText("Enter PIN:\n");
         }
         break;
-     case changePIN:
+    case changePIN:
         ui->firstWindow->setText("Enter old PIN:");
-         ui->pin->setText("");
+        ui->pin->setText("");
         break;
-     case blockCard:
+    case blockCard:
         ui->firstWindow->setText("Enter PIN:");
-         ui->pin->setText("");
+        ui->pin->setText("");
         break;
     }
 }
@@ -767,7 +827,7 @@ void MainWindow::on_cancel_clicked()
             ui->empty->show();
         }
         break;
-     case changePIN:
+    case changePIN:
         ui->pin->setText("");
         ui->firstWindow->setText("Enter PIN:\n");
         ui->firstWindow->hide();
@@ -776,13 +836,13 @@ void MainWindow::on_cancel_clicked()
         currentState = authorized;
         break;
     case blockCard:
-       ui->pin->setText("");
-       ui->firstWindow->setText("Enter PIN:\n");
-       ui->firstWindow->hide();
-       setButtonOff();
-       ui->mainWindow->show();
-       currentState = authorized;
-       break;
+        ui->pin->setText("");
+        ui->firstWindow->setText("Enter PIN:\n");
+        ui->firstWindow->hide();
+        setButtonOff();
+        ui->mainWindow->show();
+        currentState = authorized;
+        break;
     }
 
 }
@@ -920,14 +980,14 @@ void MainWindow::giveCash(const int a)
             QString temp ("You got ");
             temp+=QString::number(a);
             temp+=" dollars";
-            QMessageBox::information(this, tr("Cash"),
-                                     tr(temp.toUtf8().data()));
+            QMessageBox::about(this, tr("Cash"),
+                               tr(temp.toUtf8().data()));
         } else {
 
             QString temp ("Balance for current card is ");
             temp += QString::number(database.currentCard.getBalance());;
-            QMessageBox::information(this, tr("Balance"),
-                                     tr(temp.toUtf8().data()));
+            QMessageBox::about(this, tr("Balance"),
+                               tr(temp.toUtf8().data()));
         }
 
     }
@@ -940,6 +1000,7 @@ void MainWindow::on_settingsBtn_clicked()
     settingsWidget->show();
 
 }
+
 
 
 

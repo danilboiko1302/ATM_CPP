@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSpinBox>
 #include "Db.h"
 #include <QMessageBox>
 #include <QInputDialog>
@@ -83,6 +84,29 @@ private slots:
     void on_b0_clicked();
 
 private:
+    static QString getHex(QWidget *parent,
+                          const QString &title,
+                          const QString &label,
+                          int value = 0,
+                          int min = -2147483647,
+                          int max = 2147483647,
+                          int step = 1,
+                          bool *ok = Q_NULLPTR,
+                          Qt::WindowFlags flags = Qt::WindowFlags()){
+        QInputDialog dialog(parent, flags);
+        dialog.setWindowTitle(title);
+        dialog.setLabelText(label);
+        dialog.setIntRange(min, max);
+        dialog.setIntValue(value);
+        dialog.setIntStep(step);
+        QSpinBox *spinbox = dialog.findChild<QSpinBox*>();
+        spinbox->setDisplayIntegerBase(16);
+
+        bool ret = dialog.exec() == QDialog::Accepted;
+        if (ok)
+            *ok = ret;
+        return spinbox->text();
+    }
     enum States
     {
         changePIN, // присваивается 0
