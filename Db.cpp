@@ -151,7 +151,7 @@ Db::Db(const char* host,const char* schema,const char* user,const char* password
     db.setUserName(user);
     db.setPassword(password);
     db.open();
-    backUp();
+   // backUp();
      QSqlQuery a_query;
     if (!a_query.exec("SELECT * FROM user")) {
         qDebug() << "AAAAAAAAAAAAAAAAAA";
