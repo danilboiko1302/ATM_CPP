@@ -246,7 +246,7 @@ void MainWindow::on_insertCard_clicked()
                     }
                 }
                 if(res) break;
-            }
+                }
 
             if(!res){
                 QMessageBox::warning(this, tr("Error"),
