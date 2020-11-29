@@ -317,7 +317,11 @@ void Db::sendMoney(const QString &from, const QString &to, const int amount)
                 .arg(to);
 
        if(a_query.exec(str)){
-
+//           QString datetime;
+//           int amount;
+//           QString sender;
+//           QString recipient;
+            transactions.add(*(new Transaction(QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss"), amount, from, to)));
             getCash(from,amount);
             getCash(to,-amount);
 
