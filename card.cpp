@@ -7,10 +7,7 @@ QString Card::getNumber() const
     return number;
 }
 
-void Card::setNumber(const QString &value)
-{
-    number = value;
-}
+
 
 QString Card::getPin() const
 {
@@ -27,10 +24,7 @@ QString Card::getType() const
     return type;
 }
 
-void Card::setType(const QString &value)
-{
-    type = value;
-}
+
 
 int Card::getBalance() const
 {
@@ -57,10 +51,7 @@ int Card::getUserid() const
     return userid;
 }
 
-void Card::setUserid(int value)
-{
-    userid = value;
-}
+
 
 void Card::getCash(const int)
 {

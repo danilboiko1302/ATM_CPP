@@ -211,9 +211,13 @@ void MainWindow::on_insertCard_clicked()
 
     bool ok;
     QString text;
+    QLineEdit *edit = new QLineEdit(this);
+     edit->setInputMask("9");
+
+
     do{
         text = QInputDialog::getText(this, tr("Insert Card"),
-                                     tr("Card: "), QLineEdit::Normal,
+                                     tr("Card: "), edit->Normal,
                                      "", &ok);
         if(!ok) return;
         qDebug() << text.length();
