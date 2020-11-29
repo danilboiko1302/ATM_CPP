@@ -236,6 +236,7 @@ void Db::changePin(const QString & name, const QString & pin)
         QString   str = str_insert.arg(pin).arg(name);
         bool res = a_query.exec(str);
        if(res){
+            currentCard.setPin(pin);
            for(size_t i =0; i < users.sizes(); i++){
                for(size_t j =0; j < users[i].getCards().sizes(); j++){
                    if(users[i].getCards()[j].getNumber() == name){
@@ -245,6 +246,7 @@ void Db::changePin(const QString & name, const QString & pin)
            }
 
        }
+
         qDebug() <<a_query.lastError();
 }
 
