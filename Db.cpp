@@ -317,11 +317,7 @@ void Db::sendMoney(const QString &from, const QString &to, const int amount)
                 .arg(to);
 
        if(a_query.exec(str)){
-           if (currentCard.getNumber() == from){
-               currentCard.setBalance(currentCard.getBalance() - amount);
-           } else if (currentCard.getNumber() == to){
-               currentCard.setBalance(currentCard.getBalance() + amount);
-           }
+
             getCash(from,amount);
             getCash(to,-amount);
 
